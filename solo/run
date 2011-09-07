@@ -1,0 +1,31 @@
+#!/bin/sh
+set -e
+
+for package in ruby1.9.1 ruby1.9.1-dev; do
+    if [ "$(dpkg --status -- $package|sed -n 's/^Status: //p')" != "install ok installed" ]; then
+        # add a space after old values
+        missing="${missing:+$missing }$package"
+    fi
+done
+if [ -n "$missing" ]; then
+    echo "$0: installing missing required packages: $missing" 1>&2
+    sudo \
+	env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
+	apt-get \
+	-q \
+        -o Dpkg::Options::=--force-confnew \
+        install \
+        --no-install-recommends \
+        --assume-yes \
+	-- \
+	$missing
+fi
+
+CHEF_BIN_DIR="${HOME}/.gem/ruby/1.9.1/bin"
+CHEF_BIN="$CHEF_BIN_DIR/chef-solo"
+
+if [ ! -e "$CHEF_BIN" ]; then
+    gem1.9.1 install --no-rdoc --no-ri --user-install chef
+fi
+
+sudo "$CHEF_BIN" -c solo.rb -j solo.json
