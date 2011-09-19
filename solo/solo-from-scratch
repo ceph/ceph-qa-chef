@@ -14,7 +14,7 @@ for package in git; do
     fi
 done
 if [ -n "$missing" ]; then
-    echo "$0: installing missing required packages: $missing" 1>&2
+    echo "solo-from-scratch: installing missing required packages: $missing" 1>&2
     sudo \
 	env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
 	apt-get \
