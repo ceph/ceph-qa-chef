@@ -29,6 +29,12 @@ fi
 
 SCRATCH="$(mktemp -d 'solo-from-scratch.XXXXXXXXXXXX')"
 cd "$SCRATCH"
+
+cleanup () {
+    rm -rf "$SCRATCH"
+}
+
+trap cleanup INT TERM EXIT
 git init
 git pull https://github.com/NewDreamNetwork/ceph-qa-chef.git
 ./solo/run
