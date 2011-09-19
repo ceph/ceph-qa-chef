@@ -27,7 +27,7 @@ if [ -n "$missing" ]; then
 	$missing
 fi
 
-SCRATCH="$(mktemp -d 'solo-from-scratch.')"
+SCRATCH="$(mktemp -d 'solo-from-scratch.XXXXXXXXXXXX')"
 cd "$SCRATCH"
 git init
 git pull https://github.com/NewDreamNetwork/ceph-qa-chef.git
