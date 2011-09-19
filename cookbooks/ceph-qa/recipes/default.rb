@@ -74,16 +74,15 @@ package 'python-virtualenv'
 package 'python-dev'
 package 'libevent-dev'
 
-# for sanity
+package 'ntp'
+
+# TODO does this mean ntp starts with old config, once?
 cookbook_file '/etc/ntp.conf' do
   source "ntp.conf"
   mode 0644
   owner "root"
   group "root"
 end
-
-package 'ntp'
-
 
 execute "add user_xattr to root mount options in fstab" do
   # fugly but works! which is more than i can say for the "mount"
