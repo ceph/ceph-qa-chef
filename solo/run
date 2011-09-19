@@ -3,7 +3,7 @@ set -e
 
 cd "$(dirname "$0")"
 
-for package in ruby1.9.1 ruby1.9.1-dev; do
+for package in ruby1.9.1 ruby1.9.1-dev build-essential; do
     if [ "$(dpkg --status -- $package|sed -n 's/^Status: //p')" != "install ok installed" ]; then
         # add a space after old values
         missing="${missing:+$missing }$package"
