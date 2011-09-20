@@ -76,12 +76,16 @@ package 'libevent-dev'
 
 package 'ntp'
 
-# TODO does this mean ntp starts with old config, once?
 cookbook_file '/etc/ntp.conf' do
   source "ntp.conf"
   mode 0644
   owner "root"
   group "root"
+  notifies :restart, "service[ntp]"
+end
+
+service "ntp" do
+  action [:enable,:start]
 end
 
 execute "add user_xattr to root mount options in fstab" do
