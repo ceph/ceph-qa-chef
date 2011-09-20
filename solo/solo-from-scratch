@@ -27,7 +27,7 @@ if [ -n "$missing" ]; then
 	$missing
 fi
 
-SCRATCH="$(mktemp -d 'solo-from-scratch.XXXXXXXXXXXX')"
+SCRATCH="$(mktemp -d --tmpdir 'solo-from-scratch.XXXXXXXXXXXX')"
 cd "$SCRATCH"
 
 cleanup () {
