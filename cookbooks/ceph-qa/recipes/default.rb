@@ -31,17 +31,22 @@ wget -q -O- https://raw.github.com/NewDreamNetwork/ceph/master/keys/autobuild.as
   EOH
 end
 
-## TODO i don't dare to enable this, at it *also* contains the ceph
-## debs, and what seem to be ancient versions of them.. clean up the
-## repo first
-# file '/etc/apt/sources.list.d/radosgw.list' do
-#   owner 'root'
-#   group 'root'
-#   mode '0644'
-#   content <<-EOH
-# deb http://ceph.newdream.net/debian-rgw squeeze main
-#   EOH
-# end
+file '/etc/apt/sources.list.d/radosgw.list' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  # TODO not always natty, not always master, etc; grab branch from
+  # config, distro from ohai results (node[:lsb][:codename], but on
+  # sepia that's currently maverick not natty, and we only have
+  # dists/squeeze!)
+  content <<-EOH
+deb http://gitbuilder-apache-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
+deb-src http://gitbuilder-apache-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
+
+deb http://gitbuilder-modfastcgi-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
+deb-src http://gitbuilder-modfastcgi-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
+  EOH
+end
 
 file '/etc/apt/sources.list.d/ceph.list' do
   owner 'root'
