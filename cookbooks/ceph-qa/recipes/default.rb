@@ -65,8 +65,12 @@ end
 execute 'apt-get update' do
 end
 
-package 'apache2'
-package 'libapache2-mod-fastcgi'
+package 'apache2' do
+  action :upgrade
+end
+package 'libapache2-mod-fastcgi' do
+  action :upgrade
+end
 package 'libfcgi0ldbl'
 
 service "apache2" do
