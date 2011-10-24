@@ -22,6 +22,7 @@ package 'iozone3'
 package 'tiobench'
 package 'ltp-kernel-test'
 package 'valgrind'
+package 'python-nose'
 
 # for rgw
 execute "add autobuild gpg key to apt" do
