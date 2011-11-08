@@ -140,6 +140,18 @@ execute "merge authorized ssh keys" do
   EOH
 end
 
+execute "enable kernel logging to console" do
+  command <<-'EOH'
+    set -e
+    add_console() {
+        sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS0,115200"/' /etc/default/grub > /etc/default/grub.chef
+        mv /etc/default/grub.chef /etc/default/grub
+        update-grub
+    }
+    grep -q '^GRUB_CMDLINE_LINUX=".* console=tty0 console=ttyS0,115200' /etc/default/grub || add_console
+  EOH
+end
+
 file '/ceph-qa-ready' do
   content "ok\n"
 end
