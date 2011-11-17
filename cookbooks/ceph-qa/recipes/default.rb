@@ -9,6 +9,7 @@ package 'libedit2'
 package 'libssl0.9.8'
 package 'libgoogle-perftools0'
 package 'libcrypto++8'
+package 'libuuid1'
 
 # for compiling helpers and such
 package 'libatomic-ops-dev'
