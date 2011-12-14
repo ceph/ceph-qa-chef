@@ -67,6 +67,20 @@ end
 execute 'apt-get update' do
 end
 
+file '/etc/grub.d/02_force_timeout' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  content <<-EOH
+cat <<EOF
+set timeout=5
+EOF
+  EOH
+end
+
+execute 'update-grub' do
+end
+
 package 'apache2' do
   action :upgrade
 end
