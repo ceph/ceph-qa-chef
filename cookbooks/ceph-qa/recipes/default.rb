@@ -8,7 +8,21 @@ package 'python-gevent'
 package 'libedit2'
 package 'libssl0.9.8'
 package 'libgoogle-perftools0'
-package 'libcrypto++8'
+case node[:platform]
+when "ubuntu"
+  case node[:platform_version]
+  when "10.10"
+    package 'libcrypto++8'
+  when "11.10"
+    package 'libcrypto++9'
+  else
+    Chef::Log.fatal("Unknown ubuntu release: #{node[:platform_version]}")
+    exit 1
+  end
+else
+  Chef::Log.fatal("Unknown platform: #{node[:platform]}")
+  exit 1
+end
 package 'libuuid1'
 
 # for compiling helpers and such
