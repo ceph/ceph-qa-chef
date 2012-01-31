@@ -155,7 +155,11 @@ end
 execute "merge authorized ssh keys" do
   command <<-'EOH'
     set -e
-    sort -u -o ~ubuntu/.ssh/authorized_keys.tmp -- ~ubuntu/.ssh/authorized_keys ~ubuntu/.ssh/authorized_keys.chef
+    set -- ~ubuntu/.ssh/authorized_keys.chef
+    if [ -e ~ubuntu/.ssh/authorized_keys ]; then
+      set -- "$@" ~ubuntu/.ssh/authorized_keys
+    fi
+    sort -u -o ~ubuntu/.ssh/authorized_keys.tmp -- "$@"
     chown ubuntu:ubuntu -- ~ubuntu/.ssh/authorized_keys.tmp
     mv -- ~ubuntu/.ssh/authorized_keys.tmp ~ubuntu/.ssh/authorized_keys
   EOH
