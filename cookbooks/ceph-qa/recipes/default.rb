@@ -39,6 +39,20 @@ package 'ltp-kernel-test'
 package 'valgrind'
 package 'python-nose'
 
+
+# what distro name to use in apt sources list
+distro = node[:lsb][:codename]
+case distro
+when "maverick"
+  # we don't actually build for maverick, but natty seems to work
+  # fine; old sepia is still maverick
+  distro = "natty"
+when "oneiric"
+  # TODO we don't yet build debs for oneiric, so kludge it back to
+  # natty; FIX ME
+  distro = "natty"
+end
+
 # for rgw
 execute "add autobuild gpg key to apt" do
   command <<-EOH
@@ -68,13 +82,10 @@ file '/etc/apt/sources.list.d/ceph.list' do
   owner 'root'
   group 'root'
   mode '0644'
-  # TODO not always natty, not always master, etc; grab branch from
-  # config, distro from ohai results (node[:lsb][:codename], but on
-  # sepia that's currently maverick not natty, yet we only have
-  # dists/natty!)
+  # TODO not always master, etc; grab branch from config
   content <<-EOH
-deb http://ceph.newdream.net/debian-snapshot-amd64/master/ natty main
-deb-src http://ceph.newdream.net/debian-snapshot-amd64/master/ natty main
+deb http://ceph.newdream.net/debian-snapshot-amd64/master/ #{distro} main
+deb-src http://ceph.newdream.net/debian-snapshot-amd64/master/ #{distro} main
   EOH
 end
 
