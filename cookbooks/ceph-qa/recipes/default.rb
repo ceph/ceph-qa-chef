@@ -134,6 +134,12 @@ file '/etc/fuse.conf' do
   mode "0644"
 end
 
+directory '/home/ubuntu/.ssh' do
+  owner "ubuntu"
+  group "ubuntu"
+  mode "0755"
+end
+
 ruby_block "set up ssh keys" do
   block do
     names = data_bag('ssh-keys')
