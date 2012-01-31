@@ -61,23 +61,6 @@ wget -q -O- https://raw.github.com/NewDreamNetwork/ceph/master/keys/autobuild.as
   EOH
 end
 
-file '/etc/apt/sources.list.d/radosgw.list' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  # TODO not always natty, not always master, etc; grab branch from
-  # config, distro from ohai results (node[:lsb][:codename], but on
-  # sepia that's currently maverick not natty, and we only have
-  # dists/squeeze!)
-  content <<-EOH
-deb http://gitbuilder-apache-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
-deb-src http://gitbuilder-apache-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
-
-deb http://gitbuilder-modfastcgi-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
-deb-src http://gitbuilder-modfastcgi-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
-  EOH
-end
-
 file '/etc/apt/sources.list.d/ceph.list' do
   owner 'root'
   group 'root'
@@ -90,6 +73,12 @@ deb-src http://ceph.newdream.net/debian-snapshot-amd64/master/ #{distro} main
 end
 
 execute 'apt-get update' do
+end
+
+if node[:platform] == "ubuntu" and node[:platform_version] == "10.10"
+  include_recipe "ceph-qa::radosgw"
+else
+  Chef::Log.info("radosgw not supported on: #{node[:platform]} #{node[:platform_version]}")
 end
 
 file '/etc/grub.d/02_force_timeout' do
@@ -105,24 +94,6 @@ end
 
 execute 'update-grub' do
 end
-
-package 'apache2' do
-  action :upgrade
-end
-package 'libapache2-mod-fastcgi' do
-  action :upgrade
-end
-package 'libfcgi0ldbl'
-
-service "apache2" do
-  action [ :disable, :stop ]
-end
-
-# for s3-tests
-package 'python-pip'
-package 'python-virtualenv'
-package 'python-dev'
-package 'libevent-dev'
 
 package 'ntp'
 
