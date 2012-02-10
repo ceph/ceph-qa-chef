@@ -56,7 +56,7 @@ end
 # for rgw
 execute "add autobuild gpg key to apt" do
   command <<-EOH
-wget -q -O- https://raw.github.com/NewDreamNetwork/ceph/master/keys/autobuild.asc \
+wget -q -O- 'http://ceph.newdream.net/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
 | sudo apt-key add -
   EOH
 end
