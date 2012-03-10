@@ -24,6 +24,7 @@ else
   exit 1
 end
 package 'libuuid1'
+package 'libfcgi'
 
 # for compiling helpers and such
 package 'libatomic-ops-dev'
