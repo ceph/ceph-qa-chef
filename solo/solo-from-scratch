@@ -3,7 +3,7 @@
 # This file is not chmod a+x on purpose, to avoid running it
 # accidentally. Automation will always run it through
 #
-# wget -q -O- https://raw.github.com/NewDreamNetwork/ceph-qa-chef/master/solo/solo-from-scratch | sh
+# wget -q -O- https://raw.github.com/ceph/ceph-qa-chef/master/solo/solo-from-scratch | sh
 
 set -e
 
