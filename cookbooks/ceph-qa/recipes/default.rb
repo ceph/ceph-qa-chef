@@ -93,9 +93,6 @@ EOF
   EOH
 end
 
-execute 'update-grub' do
-end
-
 package 'ntp'
 
 cookbook_file '/etc/ntp.conf' do
@@ -168,7 +165,6 @@ execute "enable kernel logging to console" do
     add_console() {
         sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS0,115200"/' /etc/default/grub > /etc/default/grub.chef
         mv /etc/default/grub.chef /etc/default/grub
-        update-grub
     }
     grep -q '^GRUB_CMDLINE_LINUX=".* console=tty0 console=ttyS0,115200' /etc/default/grub || add_console
   EOH
@@ -189,6 +185,9 @@ chmod +x /etc/grub.d/.tmp_chef_linux
 mv /etc/grub.d/.tmp_chef_linux /etc/grub.d/10_linux
 EOH
   end
+end
+
+execute 'update-grub' do
 end
 
 file '/ceph-qa-ready' do
