@@ -76,7 +76,7 @@ end
 execute 'apt-get update' do
 end
 
-if node[:platform] == "ubuntu" and node[:platform_version] == "10.10"
+if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10")
   include_recipe "ceph-qa::radosgw"
 else
   Chef::Log.info("radosgw not supported on: #{node[:platform]} #{node[:platform_version]}")
