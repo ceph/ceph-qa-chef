@@ -174,6 +174,23 @@ execute "enable kernel logging to console" do
   EOH
 end
 
+# This became necessary with oneiric - items in a submenu are in a
+# different namespace when specifying grub defaults. Ubuntu puts the
+# newest version at the top, and the rest in a "Previous Linux
+# versions" submenu. Disable this so we can reliably set default
+# kernels, without worrying about pre-existing ones.
+# This may not work for future distros, so check for oneiric for now.
+case node[:lsb][:codename]
+when "oneiric"
+  execute "disable grub submenu creation" do
+    command <<-'EOH'
+sed 's/\! \$in_submenu\;/\! \$in_submenu \&\& false\;/' /etc/grub.d/10_linux > /etc/grub.d/.tmp_chef_linux
+chmod +x /etc/grub.d/.tmp_chef_linux
+mv /etc/grub.d/.tmp_chef_linux /etc/grub.d/10_linux
+EOH
+  end
+end
+
 file '/ceph-qa-ready' do
   content "ok\n"
 end
