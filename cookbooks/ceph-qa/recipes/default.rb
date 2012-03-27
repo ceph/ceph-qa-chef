@@ -159,6 +159,12 @@ execute "merge authorized ssh keys" do
   EOH
 end
 
+execute "add ubuntu to disk group" do
+  command <<-'EOH'
+    usermod -a -G disk ubuntu
+  EOH
+end
+
 execute "enable kernel logging to console" do
   command <<-'EOH'
     set -e
