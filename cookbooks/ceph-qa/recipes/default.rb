@@ -169,11 +169,23 @@ execute "enable kernel logging to console" do
   command <<-'EOH'
     set -e
     add_console() {
-        sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS0,115200"/' /etc/default/grub > /etc/default/grub.chef
+        sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS1,115200"/' /etc/default/grub > /etc/default/grub.chef
         mv /etc/default/grub.chef /etc/default/grub
     }
-    grep -q '^GRUB_CMDLINE_LINUX=".* console=tty0 console=ttyS0,115200' /etc/default/grub || add_console
+    grep -q '^GRUB_CMDLINE_LINUX=".* console=tty0 console=ttyS1,115200' /etc/default/grub || add_console
   EOH
+end
+
+cookbook_file '/etc/init/ttyS1.conf' do
+   source 'ttyS1.conf'
+   mode 0644
+   owner "root"
+   group "root"
+   notifies :start, "service[ttyS1]"
+end
+
+service "ttyS1" do
+  action [:enable,:start]
 end
 
 # This became necessary with oneiric - items in a submenu are in a
