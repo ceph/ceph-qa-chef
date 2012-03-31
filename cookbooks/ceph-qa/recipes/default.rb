@@ -185,6 +185,14 @@ cookbook_file '/etc/init/ttyS1.conf' do
 end
 
 service "ttyS1" do
+  # Default provider is Debian, and :enable doesn't work for upstart services
+  # unless we change provider
+  case node[:platform]
+  when "ubuntu"
+    if node[:platform_version].to_f >= 9.10
+      provider Chef::Provider::Service::Upstart
+    end
+  end
   action [:enable,:start]
 end
 
