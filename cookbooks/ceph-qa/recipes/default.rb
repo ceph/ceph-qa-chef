@@ -8,6 +8,10 @@ package 'python-gevent'
 package 'libedit2'
 package 'libssl0.9.8'
 package 'libgoogle-perftools0'
+
+# for setting BIOS settings
+package 'smbios-utils'
+
 case node[:platform]
 when "ubuntu"
   case node[:platform_version]
@@ -194,6 +198,13 @@ service "ttyS1" do
     end
   end
   action [:enable,:start]
+end
+
+execute "enable BIOS console redirection to COM2" do
+  # yes, this is horribly cryptic.  The alphanumeric options just don't work
+  /usr/sbin/smbios-token-ctl -i 0x17A --activate 2>&1 >/dev/null
+  # returns new value of boolean (1) as exit code
+  returns 1
 end
 
 # This became necessary with oneiric - items in a submenu are in a
