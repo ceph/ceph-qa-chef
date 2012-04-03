@@ -70,11 +70,8 @@ file '/etc/apt/sources.list.d/ceph.list' do
   owner 'root'
   group 'root'
   mode '0644'
-  # TODO not always master, etc; grab branch from config
-  content <<-EOH
-deb http://ceph.newdream.net/debian-snapshot-amd64/master/ #{distro} main
-deb-src http://ceph.newdream.net/debian-snapshot-amd64/master/ #{distro} main
-  EOH
+  # empty for now
+  content ''
 end
 
 execute 'apt-get update' do
