@@ -172,11 +172,16 @@ end
 execute "enable kernel logging to console" do
   command <<-'EOH'
     set -e
-    add_console() {
-        sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS1,115200"/' /etc/default/grub > /etc/default/grub.chef
-        mv /etc/default/grub.chef /etc/default/grub
-    }
-    grep -q '^GRUB_CMDLINE_LINUX=".* console=tty0 console=ttyS1,115200' /etc/default/grub || add_console
+    f=/etc/default/grub
+
+    # if it has a setting, make sure it's to ttyS1
+    if grep -q '^GRUB_CMDLINE_LINUX=.*".*console=tty0 console=ttyS[01],115200' $f; then sed 's/console=ttyS[01]/console=ttyS1/' <$f >$f.chef; fi
+
+    # if it has no setting, add it
+    if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[01],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS1,115200"/' <$f >$f.chef; fi
+
+    # if we did something; move it into place.  update-grub done below.
+    if [[ -f $f.chef ]] ; then mv $f.chef $f; fi
   EOH
 end
 
@@ -189,20 +194,15 @@ cookbook_file '/etc/init/ttyS1.conf' do
 end
 
 service "ttyS1" do
-  # Default provider is Debian, and :enable doesn't work for upstart services
-  # unless we change provider
-  case node[:platform]
-  when "ubuntu"
-    if node[:platform_version].to_f >= 9.10
-      provider Chef::Provider::Service::Upstart
-    end
-  end
+  # Default provider for Ubuntu is Debian, and :enable doesn't work 
+  # for Upstart services unless we change provider.  Assume Upstart
+  provider Chef::Provider::Service::Upstart
   action [:enable,:start]
 end
 
 execute "enable BIOS console redirection to COM2" do
   # yes, this is horribly cryptic.  The alphanumeric options just don't work
-  /usr/sbin/smbios-token-ctl -i 0x17A --activate 2>&1 >/dev/null
+  command '/usr/sbin/smbios-token-ctl -i 0x17A --activate 2>&1 >/dev/null'
   # returns new value of boolean (1) as exit code
   returns 1
 end
