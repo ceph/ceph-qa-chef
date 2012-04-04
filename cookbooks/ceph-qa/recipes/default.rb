@@ -178,7 +178,7 @@ execute "enable kernel logging to console" do
     if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[01],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS1,115200"/' <$f >$f.chef; fi
 
     # if we did something; move it into place.  update-grub done below.
-    if [[ -f $f.chef ]] ; then mv $f.chef $f; fi
+    if [ -f $f.chef ] ; then mv $f.chef $f; fi
   EOH
 end
 
