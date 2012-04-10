@@ -125,6 +125,10 @@ execute "allow fuse mounts to be used by non-owners" do
   command "grep -q ^user_allow_other /etc/fuse.conf || echo user_allow_other >> /etc/fuse.conf"
 end
 
+execute "add user ubuntu to group fuse" do
+  command "adduser ubuntu fuse"
+end
+
 file '/etc/fuse.conf' do
   mode "0644"
 end
