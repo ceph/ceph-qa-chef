@@ -44,6 +44,15 @@ package 'ltp-kernel-test'
 package 'valgrind'
 package 'python-nose'
 
+# used by the xfstests tasks
+package 'libtool'
+package 'automake'
+package 'gettext'
+package 'uuid-dev'
+package 'libacl1-dev'
+package 'xfsdump'
+package 'dmapi'
+package 'xfslibs-dev'
 
 # what distro name to use in apt sources list
 distro = node[:lsb][:codename]
