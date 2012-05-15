@@ -17,7 +17,7 @@ when "ubuntu"
   case node[:platform_version]
   when "10.10"
     package 'libcrypto++8'
-  when "11.10"
+  when "11.10", "12.04"
     package 'libcrypto++9'
   else
     Chef::Log.fatal("Unknown ubuntu release: #{node[:platform_version]}")
