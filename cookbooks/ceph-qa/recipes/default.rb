@@ -76,22 +76,12 @@ wget -q -O- 'http://ceph.newdream.net/git/?p=ceph.git;a=blob_plain;f=keys/autobu
   EOH
 end
 
-file '/etc/apt/sources.list.d/ceph.list' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  # empty for now
-  content ''
-end
-
-execute 'apt-get update' do
-end
-
-if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10")
+if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10" or node[:platform_version] == "12.04")
   include_recipe "ceph-qa::radosgw"
 else
   Chef::Log.info("radosgw not supported on: #{node[:platform]} #{node[:platform_version]}")
 end
+
 
 file '/etc/grub.d/02_force_timeout' do
   owner 'root'
