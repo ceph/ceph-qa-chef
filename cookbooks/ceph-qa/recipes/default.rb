@@ -55,19 +55,6 @@ package 'xfsdump'
 package 'dmapi'
 package 'xfslibs-dev'
 
-# what distro name to use in apt sources list
-distro = node[:lsb][:codename]
-case distro
-when "maverick"
-  # we don't actually build for maverick, but natty seems to work
-  # fine; old sepia is still maverick
-  distro = "natty"
-when "oneiric"
-  # TODO we don't yet build debs for oneiric, so kludge it back to
-  # natty; FIX ME
-  distro = "natty"
-end
-
 # for rgw
 execute "add autobuild gpg key to apt" do
   command <<-EOH
@@ -213,9 +200,9 @@ end
 # newest version at the top, and the rest in a "Previous Linux
 # versions" submenu. Disable this so we can reliably set default
 # kernels, without worrying about pre-existing ones.
-# This may not work for future distros, so check for oneiric for now.
+# This may not work for future distros, so check for oneiric/precise for now.
 case node[:lsb][:codename]
-when "oneiric"
+when "oneiric", "precise"
   execute "disable grub submenu creation" do
     command <<-'EOH'
 sed 's/\! \$in_submenu\;/\! \$in_submenu \&\& false\;/' /etc/grub.d/10_linux > /etc/grub.d/.tmp_chef_linux
