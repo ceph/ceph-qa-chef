@@ -173,19 +173,6 @@ service "ttyS1" do
   action [:enable,:start]
 end
 
-execute "enable BIOS console redirection to COM2" do
-  # yes, this is horribly cryptic.  The alphanumeric options just don't work
-  command '/usr/sbin/smbios-token-ctl -i 0x17A --activate 2>&1 >/dev/null'
-  # returns new value of boolean (1) as exit code
-  returns 1
-end
-
-execute "enable processor virtualization" do
-  command '/usr/sbin/smbios-token-ctl -i 0x14B --activate 2>&1 >/dev/null'
-  # returns new value of boolean (1) as exit code
-  returns 1
-end
-
 # This became necessary with oneiric - items in a submenu are in a
 # different namespace when specifying grub defaults. Ubuntu puts the
 # newest version at the top, and the rest in a "Previous Linux
