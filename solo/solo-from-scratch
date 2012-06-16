@@ -37,5 +37,5 @@ cleanup () {
 trap cleanup INT TERM EXIT
 git init
 #git pull https://github.com/NewDreamNetwork/ceph-qa-chef.git
-git pull http://ceph.newdream.net/git/ceph-qa-chef.git
+git pull http://ceph.com/git/ceph-qa-chef.git
 ./solo/run

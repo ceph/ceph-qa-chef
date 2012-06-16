@@ -18,14 +18,7 @@ deb http://gitbuilder.ceph.com/apache2-deb-oneiric-x86_64-basic/ref/master/ onei
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-oneiric-x86_64-basic/ref/master/ oneiric main
 EOH
   else
-    # use old maverick gitbuilders
-    content <<-EOH
-deb http://gitbuilder-apache-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
-deb-src http://gitbuilder-apache-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
-
-deb http://gitbuilder-modfastcgi-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
-deb-src http://gitbuilder-modfastcgi-deb-ndn.ceph.newdream.net/output/ref/master/ squeeze main
-EOH
+    # hrm!
   end
 end
 
