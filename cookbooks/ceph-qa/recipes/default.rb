@@ -55,6 +55,12 @@ package 'xfsdump'
 package 'dmapi'
 package 'xfslibs-dev'
 
+# for blktrace and seekwatcher
+package 'blktrace'
+package 'python-numpy'
+package 'python-matplotlib'
+package 'mencoder'
+
 # for rgw
 execute "add autobuild gpg key to apt" do
   command <<-EOH
