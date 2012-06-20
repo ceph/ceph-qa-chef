@@ -61,6 +61,10 @@ package 'python-numpy'
 package 'python-matplotlib'
 package 'mencoder'
 
+# for qemu
+package 'kvm'
+package 'genisoimage'
+
 # for rgw
 execute "add autobuild gpg key to apt" do
   command <<-EOH
