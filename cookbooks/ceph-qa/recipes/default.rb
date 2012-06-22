@@ -1,3 +1,7 @@
+execute "apt-get update" do
+  command "apt-key update"
+end
+
 package 'build-essential'
 package 'sysstat'
 package 'gdb'
