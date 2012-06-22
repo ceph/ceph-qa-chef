@@ -143,6 +143,7 @@ execute "set up ssh keys" do
     ssh-import-id -o /home/ubuntu/.ssh/authorized_keys @all
     sort -u </home/ubuntu/.ssh/authorized_keys >/home/ubuntu/.ssh/authorized_keys.sort
     mv /home/ubuntu/.ssh/authorized_keys.sort /home/ubuntu/.ssh/authorized_keys
+    chown ubuntu.ubuntu /home/ubuntu/.ssh/authorized_keys
   EOH
 end
 
