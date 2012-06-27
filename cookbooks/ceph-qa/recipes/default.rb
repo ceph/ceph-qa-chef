@@ -134,6 +134,10 @@ file '/etc/fuse.conf' do
   mode "0644"
 end
 
+execute "add user ubuntu to group kvm" do
+  command "adduser ubuntu kvm"
+end
+
 directory '/home/ubuntu/.ssh' do
   owner "ubuntu"
   group "ubuntu"
@@ -182,7 +186,7 @@ cookbook_file '/etc/init/ttyS1.conf' do
 end
 
 service "ttyS1" do
-  # Default provider for Ubuntu is Debian, and :enable doesn't work 
+  # Default provider for Ubuntu is Debian, and :enable doesn't work
   # for Upstart services unless we change provider.  Assume Upstart
   provider Chef::Provider::Service::Upstart
   action [:enable,:start]
