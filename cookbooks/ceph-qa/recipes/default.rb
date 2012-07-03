@@ -69,6 +69,13 @@ package 'mencoder'
 package 'kvm'
 package 'genisoimage'
 
+# remove ceph packages (if any)
+#  FIXME: possibly remove this when teuthology starts using debs.
+execute "remove ceph packages" do
+  command 'apt-get remove ceph ceph-common librados2 librbd1 libcephfs1 radosgw'
+  command 'rm -rf /etc/ceph'
+end
+
 # for rgw
 execute "add autobuild gpg key to apt" do
   command <<-EOH
