@@ -1,5 +1,5 @@
 execute "apt-get update" do
-  command "apt-key update"
+  command "apt-get update"
 end
 
 package 'build-essential'
