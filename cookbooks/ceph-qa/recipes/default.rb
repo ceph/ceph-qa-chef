@@ -72,7 +72,7 @@ package 'genisoimage'
 # remove ceph packages (if any)
 #  FIXME: possibly remove this when teuthology starts using debs.
 execute "remove ceph packages" do
-  command 'apt-get remove -f -y --force-yes ceph ceph-common librados2 librbd1 libcephfs1 radosgw'
+  command 'apt-get remove -f -y --force-yes ceph ceph-common librados2 librbd1 libcephfs1 radosgw || true'
 end
 execute "remove /etc/ceph" do
   command 'rm -rf /etc/ceph'
