@@ -1,5 +1,15 @@
-execute "apt-get update" do
-  command "apt-get update"
+
+# do radosgw recipe first, because it updates the apt sources and runs
+# apt-get update for us too.
+if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10" or node[:platform_version] == "12.04")
+  include_recipe "ceph-qa::radosgw"
+else
+  Chef::Log.info("radosgw not supported on: #{node[:platform]} #{node[:platform_version]}")
+
+  # der.. well, run update.
+  execute "apt-get update" do
+    command "apt-get update"
+  end
 end
 
 package 'build-essential'
@@ -84,12 +94,6 @@ execute "add autobuild gpg key to apt" do
 wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
 | sudo apt-key add -
   EOH
-end
-
-if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10" or node[:platform_version] == "12.04")
-  include_recipe "ceph-qa::radosgw"
-else
-  Chef::Log.info("radosgw not supported on: #{node[:platform]} #{node[:platform_version]}")
 end
 
 

@@ -25,6 +25,7 @@ end
 # TODO do this only once, after all sources.list manipulation is done,
 # but before first package directive (that uses non-default sources)
 execute 'apt-get update' do
+  command 'apt-get update'
 end
 
 package 'apache2' do
