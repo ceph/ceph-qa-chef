@@ -9,7 +9,7 @@ file '/etc/apt/sources.list.d/radosgw.list' do
     # pull from precise gitbuilder
     content <<-EOH
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-precise-x86_64-basic/ref/master/ precise main
-deb http://gitbuilder.ceph.com/apache2-deb-precise-x86_64-basic/apache2-precise/ref/master/ precise main
+deb http://gitbuilder.ceph.com/apache2-deb-precise-x86_64-basic/ref/master/ precise main
 EOH
   elsif node[:platform_version] == "11.10"
     # pull from oneiric gitbuilder
