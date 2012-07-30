@@ -1,4 +1,12 @@
 
+# for rgw
+execute "add autobuild gpg key to apt" do
+  command <<-EOH
+wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
+| sudo apt-key add -
+  EOH
+end
+
 # do radosgw recipe first, because it updates the apt sources and runs
 # apt-get update for us too.
 if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10" or node[:platform_version] == "12.04")
@@ -87,15 +95,6 @@ end
 execute "remove /etc/ceph" do
   command 'rm -rf /etc/ceph'
 end
-
-# for rgw
-execute "add autobuild gpg key to apt" do
-  command <<-EOH
-wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
-| sudo apt-key add -
-  EOH
-end
-
 
 file '/etc/grub.d/02_force_timeout' do
   owner 'root'
