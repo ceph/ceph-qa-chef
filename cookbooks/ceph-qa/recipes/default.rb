@@ -87,6 +87,9 @@ package 'mencoder'
 package 'kvm'
 package 'genisoimage'
 
+# for json_xs to investigate JSON by hand
+package 'libjson-xs-perl'
+
 # remove ceph packages (if any)
 #  FIXME: possibly remove this when teuthology starts using debs.
 execute "remove ceph packages" do
