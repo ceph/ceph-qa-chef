@@ -1,3 +1,7 @@
+# Check if burnupi/plana
+if !node['hostname'].match(/^(plana|burnupi)/)
+ raise "This recipe is only intended for plana and burnupi hosts"
+end
 
 # for rgw
 execute "add autobuild gpg key to apt" do
