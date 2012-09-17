@@ -263,7 +263,7 @@ end
 
 execute "Restarting Networking" do
   command <<-'EOH'
-    sudo /etc/init.d/network restart
+    sudo /etc/init.d/networking restart
   EOH
 end
 
