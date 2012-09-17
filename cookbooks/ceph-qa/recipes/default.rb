@@ -231,6 +231,42 @@ end
 execute 'update-grub' do
 end
 
+package 'ipcalc'
+
+execute "set up static IP and 10gig interface" do
+  command <<-'EOH'
+    cidr=$(ip addr show dev eth0 | grep -iw inet | awk '{print $2}')
+    ip=$(echo $cidr | cut -d'/' -f1)
+    netmask=$(ipcalc $cidr | grep -i netmask | awk '{print $2}')
+    gateway=$(ipcalc $cidr | grep -i hostmin | awk '{print $2}')
+    broadcast=$(ipcalc $cidr | grep -i hostmax | awk '{print $2}')
+    octet1=$(echo $ip | cut -d'.' -f1)
+    octet2=$(echo $ip | cut -d'.' -f2)
+    octet3=$(echo $ip | cut -d'.' -f3)
+    octet4=$(echo $ip | cut -d'.' -f4)
+    octet3=$(($octet3 + 13))
+    
+    cat interfaces | sed -i "s/iface eth0 inet dhcp/\
+    iface eth0 inet static\n\
+            address $ip\n\
+            netmask $netmask\n\
+            gateway $gateway\n\
+            broadcast $broadcast\n\
+    \n\
+    auto eth2\n\
+    iface eth2 inet static\n\
+            address $octet1.$octet2.$octet3.$octet4\n\
+            netmask $netmask\
+    /g" /etc/network/interfaces
+  EOH
+end
+
+execute "Restarting Networking" do
+  command <<-'EOH'
+    sudo /etc/init.d/network restart
+  EOH
+end
+
 file '/ceph-qa-ready' do
   content "ok\n"
 end
