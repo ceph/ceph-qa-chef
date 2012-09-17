@@ -231,6 +231,8 @@ end
 execute 'update-grub' do
 end
 
+
+#Static IP
 package 'ipcalc'
 
 execute "set up static IP and 10gig interface" do
@@ -261,9 +263,29 @@ execute "set up static IP and 10gig interface" do
   EOH
 end
 
+#Static DNS
+
+file '/etc/resolvconf/resolv.conf.d/base' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  content <<-EOH
+    nameserver 10.214.128.4
+    nameserver 10.214.128.5
+    search front.sepia.ceph.com sepia.ceph.com
+  EOH
+end
+
+
 execute "Restarting Networking" do
   command <<-'EOH'
     sudo /etc/init.d/networking restart
+  EOH
+end
+
+execute "Restarting resolvdns" do
+  command <<-'EOH'
+    sudo /etc/init.d/resolvconf restart
   EOH
 end
 
