@@ -188,7 +188,7 @@ execute "enable kernel logging to console" do
     # if it has a setting, make sure it's to ttyS1
     if grep -q '^GRUB_CMDLINE_LINUX=.*".*console=tty0 console=ttyS[01],115200' $f; then sed 's/console=ttyS[01]/console=ttyS1/' <$f >$f.chef; fi
 
-    # wif it has no setting, add it
+    # if it has no setting, add it
     if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[01],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS1,115200"/' <$f >$f.chef; fi
 
     # if we did something; move it into place.  update-grub done below.
