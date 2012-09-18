@@ -188,7 +188,7 @@ execute "enable kernel logging to console" do
     # if it has a setting, make sure it's to ttyS1
     if grep -q '^GRUB_CMDLINE_LINUX=.*".*console=tty0 console=ttyS[01],115200' $f; then sed 's/console=ttyS[01]/console=ttyS1/' <$f >$f.chef; fi
 
-    # if it has no setting, add it
+    # wif it has no setting, add it
     if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[01],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS1,115200"/' <$f >$f.chef; fi
 
     # if we did something; move it into place.  update-grub done below.
@@ -237,6 +237,9 @@ package 'ipcalc'
 
 execute "set up static IP and 10gig interface" do
   command <<-'EOH'
+    dontrun=$(grep -ic eth2 /etc/network/interfaces)
+    if [ $dontrun -eq 0 ]
+    then
     cidr=$(ip addr show dev eth0 | grep -iw inet | awk '{print $2}')
     ip=$(echo $cidr | cut -d'/' -f1)
     netmask=$(ipcalc $cidr | grep -i netmask | awk '{print $2}')
@@ -260,6 +263,7 @@ execute "set up static IP and 10gig interface" do
             address $octet1.$octet2.$octet3.$octet4\n\
             netmask $netmask\
     /g" /etc/network/interfaces
+    fi
   EOH
 end
 
