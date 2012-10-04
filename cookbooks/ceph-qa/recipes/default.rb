@@ -231,6 +231,8 @@ end
 execute 'update-grub' do
 end
 
+#NFS servers uport per David Z.
+package 'nfs-kernel-server'
 
 #Static IP
 package 'ipcalc'
