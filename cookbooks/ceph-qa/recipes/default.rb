@@ -97,6 +97,7 @@ package 'libjson-xs-perl'
 
 # for java bindings, hadoop, etc.
 package 'default-jdk'
+package 'junit4'
 
 # remove ceph packages (if any)
 #  FIXME: possibly remove this when teuthology starts using debs.
