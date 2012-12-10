@@ -101,6 +101,10 @@ package 'libjson-xs-perl'
 package 'default-jdk'
 package 'junit4'
 
+# for disk/etc monitoring
+package 'smartmontools'
+package 'nagios-nrpe-server'
+
 # remove ceph packages (if any)
 #  FIXME: possibly remove this when teuthology starts using debs.
 execute "remove ceph packages" do
@@ -180,6 +184,48 @@ execute "set up ssh keys" do
     chown ubuntu.ubuntu /home/ubuntu/.ssh/authorized_keys
   EOH
 end
+
+#Unfortunately no megacli/arecacli package for ubuntu -- Needed for raid monitoring and smart.
+cookbook_file '/usr/sbin/megacli' do
+  source "megacli"
+  mode 0755
+  owner "root"
+  group "root"
+end
+cookbook_file '/usr/sbin/cli64' do
+  source "cli64"
+  mode 0755
+  owner "root"
+  group "root"
+end
+
+
+#Custom netsaint scripts for raid/disk/smart monitoring:
+directory "/usr/libexec/" do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
+end
+cookbook_file '/usr/libexec/raid.pl' do
+  source "raid.pl"
+  mode 0755
+  owner "root"
+  group "root"
+end
+cookbook_file '/usr/libexec/smart.pl' do
+  source "smart.pl"
+  mode 0755
+  owner "root"
+  group "root"
+end
+cookbook_file '/usr/libexec/diskusage.pl' do
+  source "diskusage.pl"
+  mode 0755
+  owner "root"
+  group "root"
+end
+
 
 execute "add ubuntu to disk group" do
   command <<-'EOH'
@@ -289,6 +335,40 @@ file '/etc/resolvconf/resolv.conf.d/base' do
   EOH
 end
 
+#Nagios sudo (for raid utilities)
+file '/etc/sudoers.d/90-nagios' do
+  owner 'root'
+  group 'root'
+  mode '0440'
+  content <<-EOH
+    nagios ALL=NOPASSWD: /usr/sbin/megacli, /usr/sbin/cli64, /usr/sbin/smartctl, /usr/sbin/smartctl
+  EOH
+end
+
+#Nagios nrpe config
+cookbook_file '/etc/nagios/nrpe.cfg' do
+  source "nrpe.cfg"
+  owner 'root'
+  group 'root'
+  mode '0644'
+  notifies :restart, "service[nagios-nrpe-server]"
+end
+
+service "nagios-nrpe-server" do
+  action [:enable,:start]
+end
+
+
+#nagios nrpe settings
+file '/etc/default/nagios-nrpe-server' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+    DAEMON_OPTS="--no-ssl"
+  EOH
+end
+
 
 execute "Restarting Networking" do
   command <<-'EOH'
@@ -301,6 +381,7 @@ execute "Restarting resolvdns" do
     sudo /etc/init.d/resolvconf restart
   EOH
 end
+
 
 file '/ceph-qa-ready' do
   content "ok\n"
