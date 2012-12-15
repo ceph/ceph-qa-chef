@@ -71,6 +71,7 @@ package 'ltp-kernel-test'
 package 'valgrind'
 package 'python-nose'
 package 'mpich2'
+package 'libmpich2-3'
 package 'libmpich2-dev'
 
 # used by the xfstests tasks
