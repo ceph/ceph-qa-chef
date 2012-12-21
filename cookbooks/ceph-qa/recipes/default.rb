@@ -56,6 +56,7 @@ else
 end
 package 'libuuid1'
 package 'libfcgi'
+package 'btrfs-tools'
 
 # for compiling helpers and such
 package 'libatomic-ops-dev'
