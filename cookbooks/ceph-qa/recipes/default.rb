@@ -384,6 +384,18 @@ execute "Restarting resolvdns" do
   EOH
 end
 
+bash "ssh_max_sessions" do
+  user "root"
+  cwd "/etc/ssh"
+  code <<-EOT
+    echo "MaxSessions 1000" >> sshd_config
+  EOT
+  not_if {File.read("/etc/ssh/sshd_config") =~ /MaxSessions/}
+end
+
+service "ssh" do
+  action [:restart]
+end
 
 file '/ceph-qa-ready' do
   content "ok\n"
