@@ -74,6 +74,7 @@ package 'python-nose'
 package 'mpich2'
 package 'libmpich2-3'
 package 'libmpich2-dev'
+package 'ant'
 
 # used by the xfstests tasks
 package 'libtool'
