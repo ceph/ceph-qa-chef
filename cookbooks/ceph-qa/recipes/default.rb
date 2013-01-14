@@ -99,6 +99,8 @@ package 'genisoimage'
 
 # for json_xs to investigate JSON by hand
 package 'libjson-xs-perl'
+# for pretty-printing xml
+package 'xml-twig-tools'
 
 # for java bindings, hadoop, etc.
 package 'default-jdk'
