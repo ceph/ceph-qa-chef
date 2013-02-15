@@ -24,6 +24,15 @@ else
   end
 end
 
+# remove ceph packages (if any)
+#  FIXME: possibly remove this when teuthology starts using debs.
+execute "remove ceph packages" do
+  command 'apt-get purge -f -y --force-yes ceph ceph-common libcephfs1 radosgw python-ceph librbd1 librados2|| true'
+end
+execute "remove /etc/ceph" do
+  command 'rm -rf /etc/ceph'
+end
+
 package 'build-essential'
 package 'sysstat'
 package 'gdb'
@@ -109,15 +118,6 @@ package 'junit4'
 # for disk/etc monitoring
 package 'smartmontools'
 package 'nagios-nrpe-server'
-
-# remove ceph packages (if any)
-#  FIXME: possibly remove this when teuthology starts using debs.
-execute "remove ceph packages" do
-  command 'apt-get remove -f -y --force-yes ceph ceph-common libcephfs1 radosgw python-ceph || true'
-end
-execute "remove /etc/ceph" do
-  command 'rm -rf /etc/ceph'
-end
 
 file '/etc/grub.d/02_force_timeout' do
   owner 'root'
