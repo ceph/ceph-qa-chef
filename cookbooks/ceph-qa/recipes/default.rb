@@ -385,7 +385,7 @@ end
 
 execute "Restarting resolvdns" do
   command <<-'EOH'
-    sudo /etc/init.d/resolvconf restart
+    sudo service resolvconf restart
   EOH
 end
 
