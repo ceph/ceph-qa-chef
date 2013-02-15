@@ -3,6 +3,17 @@ if !node['hostname'].match(/^(plana|burnupi)/)
  raise "This recipe is only intended for plana and burnupi hosts"
 end
 
+
+# remove ceph packages (if any)
+#  FIXME: possibly remove this when teuthology starts using debs.
+execute "remove ceph packages" do
+  command 'apt-get purge -f -y --force-yes ceph ceph-common libcephfs1 radosgw python-ceph librbd1 librados2|| true'
+end
+execute "remove /etc/ceph" do
+  command 'rm -rf /etc/ceph'
+end
+
+
 # for rgw
 execute "add autobuild gpg key to apt" do
   command <<-EOH
@@ -22,15 +33,6 @@ else
   execute "apt-get update" do
     command "apt-get update"
   end
-end
-
-# remove ceph packages (if any)
-#  FIXME: possibly remove this when teuthology starts using debs.
-execute "remove ceph packages" do
-  command 'apt-get purge -f -y --force-yes ceph ceph-common libcephfs1 radosgw python-ceph librbd1 librados2|| true'
-end
-execute "remove /etc/ceph" do
-  command 'rm -rf /etc/ceph'
 end
 
 package 'build-essential'
