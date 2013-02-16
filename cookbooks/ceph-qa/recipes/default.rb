@@ -12,6 +12,9 @@ end
 execute "remove /etc/ceph" do
   command 'rm -rf /etc/ceph'
 end
+execute "remove ceph sources" do
+  command 'rm -f /etc/apt/sources.list.d/ceph.list'
+end
 
 
 # for rgw
