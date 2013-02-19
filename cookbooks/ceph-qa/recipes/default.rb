@@ -16,6 +16,26 @@ execute "remove ceph sources" do
   command 'rm -f /etc/apt/sources.list.d/ceph.list'
 end
 
+#Setup sources.list to use our apt mirror.
+case node[:platform]
+when "ubuntu"
+  case node[:platform_version]
+  when "12.04"
+    cookbook_file '/etc/apt/sources.list' do
+      source "sources.list.precise"
+      mode 0644
+      owner "root"
+      group "root"
+    end
+  when "12.10"
+    cookbook_file '/etc/apt/sources.list' do
+      source "sources.list.quantal"
+      mode 0644
+      owner "root"
+      group "root"
+    end
+  end
+end
 
 # for rgw
 execute "add autobuild gpg key to apt" do
