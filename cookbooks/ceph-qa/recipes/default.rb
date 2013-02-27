@@ -69,6 +69,10 @@ package 'libedit2'
 package 'libssl0.9.8'
 package 'libgoogle-perftools0'
 package 'libboost-thread1.46.1'
+package 'cryptsetup-bin'
+package 'xfsprogs'
+package 'gdisk'
+package 'parted'
 
 # for setting BIOS settings
 package 'smbios-utils'
