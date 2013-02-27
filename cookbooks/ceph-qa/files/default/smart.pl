@@ -142,6 +142,9 @@ if (-e "/proc/mdstat")
 #areca hardware raid
 if ( $pci =~ /areca/i)
 {
+	my $vsf= `sudo /usr/sbin/cli64 vsf info  | grep -v Capacity | grep -v ======== | grep -v ErrMsg | wc -l`;
+	chomp $vsf;
+	my $scsidev = "/dev/sg$vsf";
 	open(CLI,"sudo /usr/sbin/cli64 disk info | grep -vi Modelname | grep -v ====== | grep -vi GuiErr | grep -vi Free | grep -vi Failed |");
 	while (<CLI>)
 	{
@@ -152,9 +155,6 @@ if ( $pci =~ /areca/i)
 			foreach ($info[1])
 			{
 				my $drive = $_;
-				my $vsf= `sudo /usr/sbin/cli64 vsf info  | grep -v Capacity | grep -v ======== | grep -v ErrMsg | wc -l`;
-				chomp $vsf;
-				my $scsidev = "/dev/sg$vsf";
 				smartctl("$smartctl","areca",$drive,$scsidev);
 			}
 		}
