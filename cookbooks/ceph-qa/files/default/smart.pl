@@ -15,10 +15,21 @@ my $mdadm;
 my $fullcommand;
 my $message;
 
+my $hostname = `uname -n`;
+chomp $hostname;
 my $pci = `lspci | /bin/grep -i raid | /bin/grep -v PATA | /usr/bin/head -1`;
 my $scsi = `lspci | /bin/grep -i scsi | /bin/grep -v PATA | /usr/bin/head -1`;
 
 my $smartctl = "/usr/sbin/smartctl";
+
+our $realloc = '50';
+our $pend = '5';
+
+if ( $hostname =~ /mira/i )
+{
+	$realloc = '200';
+	$pend = '10';
+}
 
 unless ( -x $smartctl )
 {
@@ -72,19 +83,20 @@ sub smartctl
 	                {
 	                        my $count = $_;
 	                        $message = "Drive $drive has $count $type sectors";
-	                        if ( ( $type =~ /reallocated/i && $count > 50 ) && ( $type =~ /pending/i && $count > 5 ) )
+
+	                        if ( ( $type =~ /reallocated/i && $count > $realloc ) && ( $type =~ /pending/i && $count > $pend ) )
 	                        {
 					$crit = 1;
 					push(@out,$message);
 	                        }
 	                        else
 	                        {
-					if ( $type =~ /reallocated/i && $count > 50 )
+					if ( $type =~ /reallocated/i && $count > $realloc )
 					{
 	        				$crit = 1;
 	        				push(@out,$message);
 					}
-					if ( $type =~ /pending/i && $count > 5 )
+					if ( $type =~ /pending/i && $count > $pend )
 					{
 	        				$crit = 1;
 	        				push(@out,$message);
@@ -142,10 +154,19 @@ if (-e "/proc/mdstat")
 #areca hardware raid
 if ( $pci =~ /areca/i)
 {
+	my $firmware = `sudo /usr/sbin/cli64 sys info | grep -i firm | awk '{print \$5}' | cut -d'-' -f1`;
+	chomp $firmware;
+
+	if ( $firmware < 2011 )
+	{
+		$message = "Controller needs newer firmware for S.M.A.R.T. support";
+		push(@out,$message);
+	}
+
 	my $vsf= `sudo /usr/sbin/cli64 vsf info  | grep -v Capacity | grep -v ======== | grep -v ErrMsg | wc -l`;
 	chomp $vsf;
 	my $scsidev = "/dev/sg$vsf";
-	open(CLI,"sudo /usr/sbin/cli64 disk info | grep -vi Modelname | grep -v ====== | grep -vi GuiErr | grep -vi Free | grep -vi Failed |");
+	open(CLI,"sudo /usr/sbin/cli64 disk info | grep -vi Modelname | grep -v ====== | grep -vi GuiErr | grep -vi Free | grep -vi Failed | grep -vi 'N.A.' |");
 	while (<CLI>)
 	{
 		$drives++;
