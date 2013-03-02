@@ -269,11 +269,11 @@ if ( $pci =~ /3ware/i) {
 
 if ( $pci =~ /areca/i) {
                 open(CLI,"sudo /usr/sbin/cli64 vsf info|");
-                $devices++;
                 while (<CLI>) {
                         if ( $_ =~ /^\ \ [0-9]+/ ) {
+				$devices++;
                                 my @info = split(/\s+/,$_);
-                                if ( $info[10] ne 'Normal' ) {
+				if ( $_ !~ /Normal/i) {
                                         $crit = 1;
                                         push(@out,$_);
                                 }

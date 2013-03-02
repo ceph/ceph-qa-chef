@@ -159,6 +159,7 @@ if ( $pci =~ /areca/i)
 
 	if ( $firmware < 2011 )
 	{
+		$crit = 1;
 		$message = "Controller needs newer firmware for S.M.A.R.T. support";
 		push(@out,$message);
 	}
