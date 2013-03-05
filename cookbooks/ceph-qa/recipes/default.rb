@@ -271,15 +271,50 @@ execute "enable kernel logging to console" do
   command <<-'EOH'
     set -e
     f=/etc/default/grub
-
+    #Mira are ttyS2
+    miracheck=$(uname -n | grep -ic mira || true)
     # if it has a setting, make sure it's to ttyS1
+    if [ $miracheck -gt 0 ]
+    then
+    if grep -q '^GRUB_CMDLINE_LINUX=.*".*console=tty0 console=ttyS[012],115200' $f; then sed 's/console=ttyS[012]/console=ttyS2/' <$f >$f.chef; fi
+    else
     if grep -q '^GRUB_CMDLINE_LINUX=.*".*console=tty0 console=ttyS[01],115200' $f; then sed 's/console=ttyS[01]/console=ttyS1/' <$f >$f.chef; fi
+    fi
 
     # if it has no setting, add it
+    if [ $miracheck -gt 0 ]
+    then
+    if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[012],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS2,115200"/' <$f >$f.chef; fi
+    else
     if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[01],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS1,115200"/' <$f >$f.chef; fi
+    fi
 
     # if we did something; move it into place.  update-grub done below.
     if [ -f $f.chef ] ; then mv $f.chef $f; fi
+
+    #Remove quiet kernel output:
+    sed -i 's/quiet//g' $f
+    serialcheck=$(grep -ic serial $f || true)
+    if [ $serialcheck -eq 0 ]
+    then
+    if [ $miracheck -gt 0 ]
+    then
+    echo "" >> $f
+    echo "GRUB_TERMINAL=serial" >> $f
+    echo "GRUB_SERIAL_COMMAND=\"serial --unit=2 --speed=115200 --stop=1\"" >> $f
+    else
+    echo "" >> $f
+    echo "GRUB_TERMINAL=serial" >> $f
+    echo "GRUB_SERIAL_COMMAND=\"serial --unit=1 --speed=115200 --stop=1\"" >> $f
+    fi
+    fi
+
+    #Don't hide grub menu
+
+    sed -i 's/^GRUB_HIDDEN_TIMEOUT.*//g' $f
+
+    #set verbose kernel output via dmesg:
+    if ! grep -q dmesg /etc/rc.local; then sed -i 's/^exit 0/dmesg -n 7\nexit 0/g' /etc/rc.local; fi
   EOH
 end
 
@@ -341,11 +376,12 @@ package 'ipcalc'
 
 execute "set up static IP and 10gig interface" do
   command <<-'EOH'
-    dontrun=$(grep -ic eth2 /etc/network/interfaces)
+    dontrun=$(grep -ic inet\ static /etc/network/interfaces)
     if [ $dontrun -eq 0 ]
     then
     cidr=$(ip addr show dev eth0 | grep -iw inet | awk '{print $2}')
     ip=$(echo $cidr | cut -d'/' -f1)
+    miracheck=$(uname -n | grep -ic mira)
     netmask=$(ipcalc $cidr | grep -i netmask | awk '{print $2}')
     gateway=$(ipcalc $cidr | grep -i hostmin | awk '{print $2}')
     broadcast=$(ipcalc $cidr | grep -i hostmax | awk '{print $2}')
@@ -355,6 +391,17 @@ execute "set up static IP and 10gig interface" do
     octet4=$(echo $ip | cut -d'.' -f4)
     octet3=$(($octet3 + 13))
     
+    if [ $miracheck -gt 0 ]
+    then
+    cat interfaces | sed -i "s/iface eth0 inet dhcp/\
+    iface eth0 inet static\n\
+            address $ip\n\
+            netmask $netmask\n\
+            gateway $gateway\n\
+            broadcast $broadcast\n\
+    \n\
+    /g" /etc/network/interfaces
+    else
     cat interfaces | sed -i "s/iface eth0 inet dhcp/\
     iface eth0 inet static\n\
             address $ip\n\
@@ -367,6 +414,7 @@ execute "set up static IP and 10gig interface" do
             address $octet1.$octet2.$octet3.$octet4\n\
             netmask $netmask\
     /g" /etc/network/interfaces
+    fi
     fi
   EOH
 end
