@@ -374,6 +374,16 @@ package 'nfs-kernel-server'
 #Static IP
 package 'ipcalc'
 
+execute "set up static IP in /etc/hosts" do
+  command <<-'EOH'
+    cidr=$(ip addr show dev eth0 | grep -iw inet | awk '{print $2}')
+    ip=$(echo $cidr | cut -d'/' -f1)
+    hostname=$(uname -n)
+    sed -i "s/^127.0.1.1[\t]$hostname.front.sepia.ceph.com/$ip\t$hostname.front.sepia.ceph.com/g" /etc/hosts
+  EOH
+end
+
+
 execute "set up static IP and 10gig interface" do
   command <<-'EOH'
     dontrun=$(grep -ic inet\ static /etc/network/interfaces)
