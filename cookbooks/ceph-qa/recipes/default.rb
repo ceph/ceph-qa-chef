@@ -476,13 +476,6 @@ file '/etc/default/nagios-nrpe-server' do
   EOH
 end
 
-
-execute "Restarting Networking" do
-  command <<-'EOH'
-    sudo /etc/init.d/networking restart
-  EOH
-end
-
 execute "Restarting resolvdns" do
   command <<-'EOH'
     sudo service resolvconf restart
