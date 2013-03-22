@@ -2,32 +2,76 @@
 set -e
 
 cd "$(dirname "$0")"
+distro=$(python distro.py)
 
-for package in ruby1.9.1 ruby1.9.1-dev build-essential; do
-    if [ "$(dpkg --status -- $package|sed -n 's/^Status: //p')" != "install ok installed" ]; then
-        # add a space after old values
-        missing="${missing:+$missing }$package"
+#Shell can't do string comparosin like bash so doing it awkwardly:
+centos=$(echo $distro | grep -ic centos || true)
+ubuntu=$(echo $distro | grep -ic ubuntu || true)
+
+if [ $ubuntu -gt 0 ]; then
+    
+    for package in ruby1.9.1 ruby1.9.1-dev build-essential; do
+        if [ "$(dpkg --status -- $package|sed -n 's/^Status: //p')" != "install ok installed" ]; then
+            # add a space after old values
+            missing="${missing:+$missing }$package"
+        fi
+    done
+    if [ -n "$missing" ]; then
+        echo "$0: installing missing required packages: $missing" 1>&2
+        sudo \
+	    env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
+	    apt-get \
+	    -q \
+	    -o Dpkg::Options::=--force-confnew \
+	    install \
+	    --no-install-recommends \
+	    --assume-yes \
+	    -- \
+	    $missing
     fi
-done
-if [ -n "$missing" ]; then
-    echo "$0: installing missing required packages: $missing" 1>&2
-    sudo \
-	env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
-	apt-get \
-	-q \
-        -o Dpkg::Options::=--force-confnew \
-        install \
-        --no-install-recommends \
-        --assume-yes \
-	-- \
-	$missing
+
+    CHEF_BIN_DIR="${HOME}/.gem/ruby/1.9.1/bin"
+    CHEF_BIN="$CHEF_BIN_DIR/chef-solo"
+
+    if [ ! -e "$CHEF_BIN" ]; then
+        gem1.9.1 install --no-rdoc --no-ri --user-install chef
+    fi
+
+    sudo "$CHEF_BIN" -c solo.rb -j solo.json
 fi
 
-CHEF_BIN_DIR="${HOME}/.gem/ruby/1.9.1/bin"
-CHEF_BIN="$CHEF_BIN_DIR/chef-solo"
+if [ $centos -gt 0 ]; then
+    # EPEL Repo
+    installed=$(sudo yum list installed | grep -ic epel-release- || true)
+    if [ $installed -eq 0 ]; then
+        sudo yum -y install http://mirrors.tummy.com/pub/fedora.redhat.com/epel/6/x86_64/epel-release-6-8.noarch.rpm
+    fi
 
-if [ ! -e "$CHEF_BIN" ]; then
-    gem1.9.1 install --no-rdoc --no-ri --user-install chef
+    # Individual Packages
+    for package in ruby-devel.x86_64 ruby.x86_64 rubygems.noarch; do
+        installed=$(sudo yum list installed | grep -ic "$package" || true)
+        if [ $installed -eq 0 ]; then
+            echo Installing missing package: "$package"
+            sudo yum -y install "$package"
+        fi
+    done
+
+    # Group Packages:
+    for grouppackage in "Development Tools"; do
+        installed=$(sudo yum grouplist | grep -A 100 "Installed Groups" | grep -B 100 "Installed Language Groups" | egrep "^   " | grep -ic "$groupackage" || true)
+        if [ $installed -eq 0 ]
+        then
+            echo installing missing group package: "$grouppackage"
+            sudo yum -y groupinstall "$grouppackage"
+        fi
+    done
+
+    rubyversion=$(ruby -v | awk '{print $2}' | cut -d'.' -f1-2)
+    CHEF_BIN="/usr/bin/chef-solo"
+
+    if [ ! -e "$CHEF_BIN" ]; then
+        sudo gem install --no-rdoc --no-ri chef
+    fi
+
+    sudo "$CHEF_BIN" -l debug -c solo.rb -j solo.json
 fi
-
-sudo "$CHEF_BIN" -c solo.rb -j solo.json
