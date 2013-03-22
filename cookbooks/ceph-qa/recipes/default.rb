@@ -326,12 +326,15 @@ cookbook_file '/etc/init/ttyS1.conf' do
    notifies :start, "service[ttyS1]"
 end
 
-cookbook_file '/etc/init/ttyS2.conf' do
-   source 'ttyS2.conf'
-   mode 0644
-   owner "root"
-   group "root"
-   notifies :start, "service[ttyS2]"
+
+if node['hostname'].match(/^(mira)/)
+  cookbook_file '/etc/init/ttyS2.conf' do
+     source 'ttyS2.conf'
+     mode 0644
+     owner "root"
+     group "root"
+     notifies :start, "service[ttyS2]"
+  end
 end
 
 service "ttyS1" do
@@ -341,11 +344,13 @@ service "ttyS1" do
   action [:enable,:start]
 end
 
-service "ttyS2" do
-  # Default provider for Ubuntu is Debian, and :enable doesn't work
-  # for Upstart services unless we change provider.  Assume Upstart
-  provider Chef::Provider::Service::Upstart
-  action [:enable,:start]
+if node['hostname'].match(/^(mira)/)
+  service "ttyS2" do
+    # Default provider for Ubuntu is Debian, and :enable doesn't work
+    # for Upstart services unless we change provider.  Assume Upstart
+    provider Chef::Provider::Service::Upstart
+    action [:enable,:start]
+  end
 end
 
 # This became necessary with oneiric - items in a submenu are in a
