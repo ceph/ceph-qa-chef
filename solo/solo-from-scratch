@@ -7,24 +7,49 @@
 
 set -e
 
-for package in git; do
-    if [ "$(dpkg --status -- $package|sed -n 's/^Status: //p')" != "install ok installed" ]; then
-        # add a space after old values
-        missing="${missing:+$missing }$package"
+cd "$(dirname "$0")"
+
+wget -q -O distro.py https://raw.github.com/ceph/ceph-qa-chef/master/solo/distro.py
+chmod 755 distro.py
+distro=$(python distro.py)
+rm distro.py
+
+#Shell can't do string comparosin like bash so doing it awkwardly:
+centos=$(echo $distro | grep -ic centos || true)
+ubuntu=$(echo $distro | grep -ic ubuntu || true)
+
+if [ $ubuntu -gt 0 ]; then
+    for package in git; do
+        if [ "$(dpkg --status -- $package|sed -n 's/^Status: //p')" != "install ok installed" ]; then
+            # add a space after old values
+            missing="${missing:+$missing }$package"
+        fi
+    done
+    if [ -n "$missing" ]; then
+        echo "solo-from-scratch: installing missing required packages: $missing" 1>&2
+        sudo \
+	    env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
+	    apt-get \
+	    -q \
+            -o Dpkg::Options::=--force-confnew \
+            install \
+            --no-install-recommends \
+            --assume-yes \
+	    -- \
+	    $missing
     fi
-done
-if [ -n "$missing" ]; then
-    echo "solo-from-scratch: installing missing required packages: $missing" 1>&2
-    sudo \
-	env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
-	apt-get \
-	-q \
-        -o Dpkg::Options::=--force-confnew \
-        install \
-        --no-install-recommends \
-        --assume-yes \
-	-- \
-	$missing
+fi
+
+if [ $centos -gt 0 ]; then
+    #Individual Packages
+    for package in git; do
+        installed=$(sudo yum list installed | grep -ic "$package" || true)
+        if [ $installed -eq 0 ]
+        then
+            echo Installing missing package: "$package"
+            sudo yum -y install "$package"
+        fi
+    done
 fi
 
 SCRATCH="$(mktemp -d --tmpdir 'solo-from-scratch.XXXXXXXXXXXX')"
