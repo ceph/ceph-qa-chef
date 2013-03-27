@@ -43,7 +43,7 @@ fi
 if [ $centos -gt 0 ]; then
     #Individual Packages
     for package in git; do
-        installed=$(sudo yum list installed | grep -ic "$package" || true)
+        installed=$(sudo yum list installed | grep -ic "^$package" || true)
         if [ $installed -eq 0 ]
         then
             echo Installing missing package: "$package"
