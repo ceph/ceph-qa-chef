@@ -303,6 +303,14 @@ if node[:platform] == "centos"
   end
 end
 
+if node[:platform] == "centos"
+  cookbook_file '/etc/security/limits.d/remote.conf' do
+    source "remote.conf"
+    mode 0644
+    owner "root"
+    group "root"
+  end
+end
 
 if node[:platform] == "ubuntu"
   execute "add user_xattr to root mount options in fstab" do
