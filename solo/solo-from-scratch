@@ -27,6 +27,7 @@ if [ $ubuntu -gt 0 ]; then
     done
     if [ -n "$missing" ]; then
         echo "solo-from-scratch: installing missing required packages: $missing" 1>&2
+        sudo apt-get update
         sudo \
 	    env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
 	    apt-get \
