@@ -537,58 +537,60 @@ if node[:platform] == "centos"
   package 'nfs-utils'
 end
 
-if node[:platform] == "ubuntu"
-  execute "set up static IP in /etc/hosts" do
-    command <<-'EOH'
-      cidr=$(ip addr show dev eth0 | grep -iw inet | awk '{print $2}')
-      ip=$(echo $cidr | cut -d'/' -f1)
-      hostname=$(uname -n)
-      sed -i "s/^127.0.1.1[\t]$hostname.front.sepia.ceph.com/$ip\t$hostname.front.sepia.ceph.com/g" /etc/hosts
-    EOH
-  end
-  execute "set up static IP and 10gig interface" do
-    command <<-'EOH'
-      dontrun=$(grep -ic inet\ static /etc/network/interfaces)
-      if [ $dontrun -eq 0 ]
-      then
-      cidr=$(ip addr show dev eth0 | grep -iw inet | awk '{print $2}')
-      ip=$(echo $cidr | cut -d'/' -f1)
-      miracheck=$(uname -n | grep -ic mira)
-      netmask=$(ipcalc $cidr | grep -i netmask | awk '{print $2}')
-      gateway=$(ipcalc $cidr | grep -i hostmin | awk '{print $2}')
-      broadcast=$(ipcalc $cidr | grep -i hostmax | awk '{print $2}')
-      octet1=$(echo $ip | cut -d'.' -f1)
-      octet2=$(echo $ip | cut -d'.' -f2)
-      octet3=$(echo $ip | cut -d'.' -f3)
-      octet4=$(echo $ip | cut -d'.' -f4)
-      octet3=$(($octet3 + 13))
+if !node['hostname'].match(/^(vpm)/)
+  if node[:platform] == "ubuntu"
+    execute "set up static IP in /etc/hosts" do
+      command <<-'EOH'
+        cidr=$(ip addr show dev eth0 | grep -iw inet | awk '{print $2}')
+        ip=$(echo $cidr | cut -d'/' -f1)
+        hostname=$(uname -n)
+        sed -i "s/^127.0.1.1[\t]$hostname.front.sepia.ceph.com/$ip\t$hostname.front.sepia.ceph.com/g" /etc/hosts
+      EOH
+    end
+    execute "set up static IP and 10gig interface" do
+      command <<-'EOH'
+        dontrun=$(grep -ic inet\ static /etc/network/interfaces)
+        if [ $dontrun -eq 0 ]
+        then
+        cidr=$(ip addr show dev eth0 | grep -iw inet | awk '{print $2}')
+        ip=$(echo $cidr | cut -d'/' -f1)
+        miracheck=$(uname -n | grep -ic mira)
+        netmask=$(ipcalc $cidr | grep -i netmask | awk '{print $2}')
+        gateway=$(ipcalc $cidr | grep -i hostmin | awk '{print $2}')
+        broadcast=$(ipcalc $cidr | grep -i hostmax | awk '{print $2}')
+        octet1=$(echo $ip | cut -d'.' -f1)
+        octet2=$(echo $ip | cut -d'.' -f2)
+        octet3=$(echo $ip | cut -d'.' -f3)
+        octet4=$(echo $ip | cut -d'.' -f4)
+        octet3=$(($octet3 + 13))
       
-      if [ $miracheck -gt 0 ]
-      then
-      cat interfaces | sed -i "s/iface eth0 inet dhcp/\
-      iface eth0 inet static\n\
+        if [ $miracheck -gt 0 ]
+        then
+        cat interfaces | sed -i "s/iface eth0 inet dhcp/\
+        iface eth0 inet static\n\
               address $ip\n\
               netmask $netmask\n\
               gateway $gateway\n\
               broadcast $broadcast\n\
-      \n\
-      /g" /etc/network/interfaces
-      else
-      cat interfaces | sed -i "s/iface eth0 inet dhcp/\
-      iface eth0 inet static\n\
-              address $ip\n\
+        \n\
+        /g" /etc/network/interfaces
+        else
+        cat interfaces | sed -i "s/iface eth0 inet dhcp/\
+        iface eth0 inet static\n\
+              address $ip\n
               netmask $netmask\n\
               gateway $gateway\n\
               broadcast $broadcast\n\
-      \n\
-      auto eth2\n\
-      iface eth2 inet static\n\
+        \n\
+        auto eth2\n\
+        iface eth2 inet static\n\
               address $octet1.$octet2.$octet3.$octet4\n\
               netmask $netmask\
-      /g" /etc/network/interfaces
-      fi
-      fi
-    EOH
+        /g" /etc/network/interfaces
+        fi
+        fi
+      EOH
+    end
   end
 end
 
