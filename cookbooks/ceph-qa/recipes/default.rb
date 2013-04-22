@@ -161,7 +161,7 @@ if node[:platform] == "ubuntu"
   package 'tiobench'
   
   # No ltp-kernel-test package on quantal
-  if !node[:platform_version] == "12.10"
+  if node[:platform_version] != "12.10"
     package 'ltp-kernel-test'
   end
   package 'valgrind'
