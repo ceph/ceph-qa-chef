@@ -566,7 +566,7 @@ if !node['hostname'].match(/^(vpm)/)
       
         if [ $miracheck -gt 0 ]
         then
-        cat interfaces | sed -i "s/iface eth0 inet dhcp/\
+        sed -i "s/iface eth0 inet dhcp/\
         iface eth0 inet static\n\
               address $ip\n\
               netmask $netmask\n\
@@ -575,9 +575,9 @@ if !node['hostname'].match(/^(vpm)/)
         \n\
         /g" /etc/network/interfaces
         else
-        cat interfaces | sed -i "s/iface eth0 inet dhcp/\
+        sed -i "s/iface eth0 inet dhcp/\
         iface eth0 inet static\n\
-              address $ip\n
+              address $ip\n\
               netmask $netmask\n\
               gateway $gateway\n\
               broadcast $broadcast\n\
