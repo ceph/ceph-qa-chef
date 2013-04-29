@@ -301,6 +301,10 @@ if node[:platform] == "centos"
   service "ntpd" do
     action [:enable,:start]
   end
+
+  service "iptables" do
+    action [:disable,:stop]
+  end
 end
 
 if node[:platform] == "centos"
