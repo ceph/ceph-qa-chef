@@ -204,6 +204,9 @@ if node[:platform] == "ubuntu"
   # for disk/etc monitoring
   package 'smartmontools'
   package 'nagios-nrpe-server'
+
+  # for samba testing
+  package 'cifs-utils'
 end
 
 if node[:platform] == "centos"
