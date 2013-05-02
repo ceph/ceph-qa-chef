@@ -492,7 +492,9 @@ if node[:platform] == "ubuntu"
   end
 end
 
-execute 'update-grub' do
+if node[:platform] == "ubuntu"
+  execute 'update-grub' do
+  end
 end
 
 if node[:platform] == "ubuntu"
