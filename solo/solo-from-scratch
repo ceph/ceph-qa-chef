@@ -9,7 +9,7 @@ set -e
 
 cd "$(dirname "$0")"
 
-wget -q -O distro.py https://raw.github.com/ceph/ceph-qa-chef/master/solo/distro.py
+wget  -O distro.py 'http://ceph.com/git/?p=ceph-qa-chef.git;a=blob_plain;f=solo/distro.py;hb=HEAD'
 chmod 755 distro.py
 distro=$(python distro.py)
 rm distro.py
