@@ -440,6 +440,15 @@ cookbook_file '/usr/libexec/diskusage.pl' do
 end
 
 
+#SSH template for no strict host checking:
+cookbook_file '/etc/ssh/ssh_config' do
+  source "ssh_config"
+  mode 0755
+  owner "root"
+  group "root"
+end
+
+
 if node[:platform] == "ubuntu"
   execute "add ubuntu to disk group" do
     command <<-'EOH'
