@@ -222,7 +222,9 @@ if node[:platform] == "ubuntu"
   package 'xfslibs-dev'
   
   #For Mark Nelson:
-  package 'sysprof'
+  if node[:languages][:ruby][:host_cpu] != "arm"
+    package 'sysprof'
+  end
   package 'pdsh'
   package 'collectl'
   service "collectl" do
