@@ -311,6 +311,25 @@ if node[:platform] == "centos"
   package 'smartmontools'
 end
 
+
+#DistCC for arm
+package 'distcc'
+
+if node[:platform] == "ubuntu"
+  if node[:languages][:ruby][:host_cpu] == "arm"
+    cookbook_file '/etc/default/distcc' do
+      source "distcc"
+      mode 0644
+      owner "root"
+      group "root"
+    end
+    service "distcc" do
+      action [:enable,:start]
+    end
+  end
+end
+
+
 if node[:languages][:ruby][:host_cpu] != "arm"
   if node[:platform] == "ubuntu"
     file '/etc/grub.d/02_force_timeout' do
