@@ -1,0 +1,2 @@
+deb http://ppa.launchpad.net/calxeda/kernel-ppa/ubuntu quantal main
+deb-src http://ppa.launchpad.net/calxeda/kernel-ppa/ubuntu quantal main

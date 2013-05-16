@@ -17,6 +17,23 @@ if node[:platform] == "ubuntu"
   end
 end
 
+#Setup calxeda repo for quantal arm nodes.
+if node[:languages][:ruby][:host_cpu] == "arm"
+  case node[:platform]
+  when "ubuntu"
+    case node[:platform_version]
+    when "12.10"
+      cookbook_file '/etc/apt/sources.list.d/calxeda.list' do
+        source "calxeda-quantal.list"
+        mode 0644
+        owner "root"
+        group "root"
+      end
+    end
+  end
+end
+
+
 #Setup sources.list to use our apt mirror.
 if node[:languages][:ruby][:host_cpu] != "arm"
   case node[:platform]
@@ -69,6 +86,19 @@ end
 
 
 if node[:platform] == "ubuntu"
+
+  if node[:languages][:ruby][:host_cpu] == "arm"
+    if node[:platform_version] == "12.10"
+      execute "import calxeda key" do
+        command "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 86E4C5D27E957C4D"
+      end
+      execute "apt-get update" do
+        command "apt-get update"
+      end
+      package 'linux-image-3.5.0-1000-highbank'
+    end
+  end
+
   package 'lsb-release'
   package 'build-essential'
   package 'sysstat'
