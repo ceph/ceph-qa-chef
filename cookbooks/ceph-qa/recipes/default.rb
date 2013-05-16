@@ -96,6 +96,8 @@ if node[:platform] == "ubuntu"
         command "apt-get update"
       end
       package 'linux-image-3.5.0-1000-highbank'
+      package 'linux-tools-common'
+      package 'linux-tools-3.5.0-1000'
     end
   end
 
@@ -219,6 +221,14 @@ if node[:platform] == "ubuntu"
   package 'dmapi'
   package 'xfslibs-dev'
   
+  #For Mark Nelson:
+  package 'sysprof'
+  package 'pdsh'
+  package 'collectl'
+  service "collectl" do
+    action [:disable,:stop]
+  end  
+
   # for blktrace and seekwatcher
   package 'blktrace'
   package 'python-numpy'
