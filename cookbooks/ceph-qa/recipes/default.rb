@@ -11,3 +11,8 @@ end
 if node[:platform] == "centos"
   include_recipe "ceph-qa::centos"
 end
+
+if node[:platform] == "redhat"
+  include_recipe "ceph-qa::redhat"
+end
+

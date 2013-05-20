@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 distro=$(python distro.py)
 
 #Shell can't do string comparosin like bash so doing it awkwardly:
-centos=$(echo $distro | grep -ic centos || true)
+centos=$(echo $distro | grep -ic -e centos -e redhat || true)
 ubuntu=$(echo $distro | grep -ic ubuntu || true)
 
 if [ $ubuntu -gt 0 ]; then
