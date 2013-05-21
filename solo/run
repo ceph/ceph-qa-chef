@@ -6,7 +6,8 @@ distro=$(python distro.py)
 
 #Shell can't do string comparosin like bash so doing it awkwardly:
 centos=$(echo $distro | grep -ic -e centos -e redhat || true)
-ubuntu=$(echo $distro | grep -ic ubuntu || true)
+ubuntu=$(echo $distro | grep -ic -e ubuntu -e debian || true)
+debian=$(echo $distro | grep -ic debian || true)
 
 if [ $ubuntu -gt 0 ]; then
     
@@ -33,12 +34,15 @@ if [ $ubuntu -gt 0 ]; then
 
     CHEF_BIN_DIR="${HOME}/.gem/ruby/1.9.1/bin"
     CHEF_BIN="$CHEF_BIN_DIR/chef-solo"
-
     if [ ! -e "$CHEF_BIN" ]; then
         gem1.9.1 install --no-rdoc --no-ri --user-install chef
     fi
-
-    sudo "$CHEF_BIN" -c solo.rb -j solo.json
+    if [ $debian -gt 0 ]
+    then
+        sudo -E "$CHEF_BIN" -c solo.rb -j solo.json
+    else
+        sudo "$CHEF_BIN" -c solo.rb -j solo.json
+    fi
 fi
 
 if [ $centos -gt 0 ]; then
