@@ -15,7 +15,7 @@ distro=$(python distro.py)
 rm distro.py
 
 #Shell can't do string comparosin like bash so doing it awkwardly:
-centos=$(echo $distro | grep -ic -e centos -e redhat || true)
+centos=$(echo $distro | grep -ic -e centos -e redhat -e fedora || true)
 ubuntu=$(echo $distro | grep -ic -e ubuntu -e debian || true)
 
 if [ $ubuntu -gt 0 ]; then
