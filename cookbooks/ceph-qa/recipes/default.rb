@@ -20,3 +20,7 @@ if node[:platform] == "debian"
   include_recipe "ceph-qa::debian"
 end
 
+if node[:platform] == "fedora"
+  include_recipe "ceph-qa::fedora"
+end
+

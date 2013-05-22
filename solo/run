@@ -5,9 +5,10 @@ cd "$(dirname "$0")"
 distro=$(python distro.py)
 
 #Shell can't do string comparosin like bash so doing it awkwardly:
-centos=$(echo $distro | grep -ic -e centos -e redhat || true)
+centos=$(echo $distro | grep -ic -e centos -e redhat -e fedora || true)
 ubuntu=$(echo $distro | grep -ic -e ubuntu -e debian || true)
 debian=$(echo $distro | grep -ic debian || true)
+fedora=$(echo $distro | grep -ic fedora || true)
 
 if [ $ubuntu -gt 0 ]; then
     
@@ -46,11 +47,28 @@ if [ $ubuntu -gt 0 ]; then
 fi
 
 if [ $centos -gt 0 ]; then
-    # EPEL Repo
-    installed=$(sudo yum list installed | grep -ic epel-release- || true)
-    if [ $installed -eq 0 ]; then
-        sudo yum -y install http://mirrors.tummy.com/pub/fedora.redhat.com/epel/6/x86_64/epel-release-6-8.noarch.rpm
+    if [ $fedora -lt 1 ]
+    then
+        # EPEL Repo
+        installed=$(sudo yum list installed | grep -ic epel-release- || true)
+        if [ $installed -eq 0 ]; then
+            sudo yum -y install http://mirrors.tummy.com/pub/fedora.redhat.com/epel/6/x86_64/epel-release-6-8.noarch.rpm
+        fi
     fi
+    if [ $fedora -gt 0 ]
+    then
+        sudo yum -y install audit
+    fi
+
+    # Group Packages:
+    for grouppackage in "Development Tools"; do
+        installed=$(sudo yum grouplist | grep -A 100 "Installed Groups" | grep -B 100 "Installed Language Groups" | egrep "^   " | grep -ic "$grouppackage" || true)
+        if [ $installed -eq 0 ]
+        then
+            echo installing missing group package: "$grouppackage"
+            sudo yum -y groupinstall "$grouppackage"
+        fi
+    done
 
     # Individual Packages
     for package in ruby-devel.x86_64 ruby.x86_64 rubygems.noarch; do
@@ -61,18 +79,13 @@ if [ $centos -gt 0 ]; then
         fi
     done
 
-    # Group Packages:
-    for grouppackage in "Development Tools"; do
-        installed=$(sudo yum grouplist | grep -A 100 "Installed Groups" | grep -B 100 "Installed Language Groups" | egrep "^   " | grep -ic "$groupackage" || true)
-        if [ $installed -eq 0 ]
-        then
-            echo installing missing group package: "$grouppackage"
-            sudo yum -y groupinstall "$grouppackage"
-        fi
-    done
-
     rubyversion=$(ruby -v | awk '{print $2}' | cut -d'.' -f1-2)
-    CHEF_BIN="/usr/bin/chef-solo"
+    if [ $fedora -gt 0 ]
+    then
+        CHEF_BIN="/usr/local/bin/chef-solo"
+    else
+        CHEF_BIN="/usr/bin/chef-solo"
+    fi
 
     if [ ! -e "$CHEF_BIN" ]; then
         sudo gem install --no-rdoc --no-ri chef
