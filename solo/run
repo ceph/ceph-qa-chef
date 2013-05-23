@@ -66,16 +66,16 @@ if [ $centos -gt 0 ]; then
         if [ $installed -eq 0 ]
         then
             echo installing missing group package: "$grouppackage"
-            sudo yum -y groupinstall "$grouppackage"
+            sudo yum --nogpgcheck -y groupinstall "$grouppackage"
         fi
     done
 
     # Individual Packages
-    for package in ruby-devel.x86_64 ruby.x86_64 rubygems.noarch; do
+    for package in gcc ruby-devel.x86_64 ruby.x86_64 rubygems.noarch; do
         installed=$(sudo yum list installed | grep -ic "$package" || true)
         if [ $installed -eq 0 ]; then
             echo Installing missing package: "$package"
-            sudo yum -y install "$package"
+            sudo yum --nogpgcheck -y install "$package"
         fi
     done
 

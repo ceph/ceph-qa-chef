@@ -15,6 +15,9 @@ package 'libgcrypt'
 package 'cryptopp-devel'
 package 'cryptopp'
 
+#ceph deploy
+package 'python-virtualenv'
+
 # for setting BIOS settings
 package 'smbios-utils'
 
