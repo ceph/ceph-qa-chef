@@ -21,20 +21,7 @@ package 'python-virtualenv'
 # for setting BIOS settings
 package 'smbios-utils'
 
-
-case node[:platform]
-when "centos"
-  case node[:platform_version]
-  when "6.3"
-     package 'openssl'
-  else
-    Chef::Log.fatal("Unknown distro release: #{node[:platform_version]}")
-    exit 1
-  end
-else
-  Chef::Log.fatal("Unknown platform: #{node[:platform]}")
-  exit 1
-end
+package 'openssl'
 
 package 'libuuid'
 package 'fcgi-devel'
