@@ -1,3 +1,21 @@
+#Local Repo
+file '/etc/yum.repos.d/qemu-ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[centos6-qemu-local]
+name=Cent OS 6 Local Qemu Repo
+baseurl=http://apt-mirror.front.sepia.ceph.com/centos6-qemu-kvm/
+gpgcheck=0
+enabled=1
+  EOH
+end
+
+execute "Clearing yum cache" do
+  command "yum clean dbcache"
+end
+
 package 'redhat-lsb'
 package 'sysstat'
 package 'gdb'
@@ -57,8 +75,32 @@ package 'numpy'
 package 'python-matplotlib'
   
 # for qemu:
-package 'qemu-kvm'
-package 'qemu-kvm-tools'
+if node[:platform_version] == "6.4"
+  package 'qemu-img' do
+    action :remove
+  end
+  package 'qemu-kvm' do
+    action :remove
+  end
+  package 'qemu-kvm-tools' do
+    action :remove
+  end
+  package 'qemu-guest-agent' do
+    action :remove
+  end
+  package 'qemu-img' do
+    version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+  end
+  package 'qemu-kvm' do
+    version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+  end
+  package 'qemu-kvm-tools' do
+    version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+  end
+  package 'qemu-guest-agent' do
+    version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+  end
+end
 package 'genisoimage'
 
 # for json_xs to investigate JSON by hand
