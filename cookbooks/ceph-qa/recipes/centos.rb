@@ -12,6 +12,20 @@ enabled=1
   EOH
 end
 
+file '/etc/yum.repos.d/rpmforge.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH2
+[rpmforge]
+name=Red Hat Enterprise $releasever - RPMforge.net - dag
+baseurl=http://apt.sw.be/redhat/el6/en/x86_64/dag
+gpgcheck=0
+enabled=1
+protect=0
+  EOH2
+end
+
 execute "Clearing yum cache" do
   command "yum clean all"
 end
@@ -59,6 +73,8 @@ package 'ant'
 package 'dbench'
 package 'bonnie++'
 package 'tiobench'
+package 'fuse-sshfs'
+package 'iozone'
   
 # used by the xfstests tasks
 package 'libtool'
@@ -153,6 +169,9 @@ file '/etc/fuse.conf' do
   mode "0644"
 end
 
+execute "create kvm if needed" do
+  command "if ! grep kvm /etc/group > /dev/null; then groupadd -r kvm; fi"
+end
 execute "add user ubuntu to group kvm" do
   command "gpasswd -a ubuntu kvm"
 end
