@@ -13,7 +13,7 @@ enabled=1
 end
 
 execute "Clearing yum cache" do
-  command "yum clean dbcache"
+  command "yum clean all"
 end
 
 package 'redhat-lsb'
@@ -87,6 +87,15 @@ package 'qemu-kvm-tools' do
 end
 package 'qemu-guest-agent' do
   action :remove
+end
+package 'ceph-libs' do
+  action :remove
+end
+package 'librados2' do
+  version '0.61.3-9.g60e4bb0.el6'
+end
+package 'librbd1' do
+  version '0.61.3-9.g60e4bb0.el6'
 end
 package 'qemu-img' do
   version '0.12.1.2-2.355.el6.2.cuttlefish.async'
