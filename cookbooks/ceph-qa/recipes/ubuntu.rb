@@ -49,6 +49,16 @@ if node[:languages][:ruby][:host_cpu] != "arm"
   end
 end
 
+#Repo for libgoogle/tcmalloc.
+if node[:languages][:ruby][:host_cpu] == "arm"
+  cookbook_file '/etc/apt/sources.list.d/perftools.list' do
+    source "perftools.list"
+    mode 0644
+    owner "root"
+    group "root"
+  end
+end
+
 if node[:platform] == "ubuntu"
   # for rgw
   execute "add autobuild gpg key to apt" do
@@ -99,12 +109,10 @@ package 'python-gevent'
 # for running ceph
 package 'libedit2'
 package 'libssl0.9.8'
-if node[:languages][:ruby][:host_cpu] != "arm"
-  if node[:platform_version] == "12.10"
-    package 'libgoogle-perftools4'
-  else
-    package 'libgoogle-perftools0'
-  end
+if node[:platform_version] == "12.10"
+  package 'libgoogle-perftools4'
+else
+  package 'libgoogle-perftools0'
 end
 
 if node[:platform_version] == "12.10"
