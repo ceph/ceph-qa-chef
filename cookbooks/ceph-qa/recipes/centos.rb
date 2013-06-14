@@ -127,6 +127,26 @@ package 'qemu-guest-agent' do
 end
 package 'genisoimage'
 
+#Rados GW
+package 'httpd' do
+  version '2.2.15-15.el6.1'
+end
+package 'httpd-devel' do
+  version '2.2.15-15.el6.1'
+end
+package 'mod_ssl' do
+  version '2.2.15-15.el6.1'
+end
+package 'mod_fcgid' do
+  version '2.3.7-1.el6'
+end
+service "httpd" do
+  action [ :disable, :stop ]
+end
+package 'python-pip'
+package 'python-devel'
+package 'libevent-devel'
+
 # for json_xs to investigate JSON by hand
 package 'perl-JSON'
   
