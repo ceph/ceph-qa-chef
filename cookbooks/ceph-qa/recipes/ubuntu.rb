@@ -49,6 +49,18 @@ if node[:languages][:ruby][:host_cpu] != "arm"
   end
 end
 
+if node[:languages][:ruby][:host_cpu] != "arm"
+  cookbook_file '/etc/cron.weekly/kernel-clean' do
+    source "kernel-clean"
+    mode 0755
+    owner "root"
+    group "root"
+  end
+  execute "Restarting Cron" do
+    command "service cron restart"
+  end
+end
+
 #Repo for libgoogle/tcmalloc.
 if node[:languages][:ruby][:host_cpu] == "arm"
   cookbook_file '/etc/apt/sources.list.d/perftools.list' do
