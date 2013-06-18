@@ -23,12 +23,12 @@ my $scsi = `lspci | /bin/grep -i scsi | /bin/grep -v PATA | /usr/bin/head -1`;
 my $smartctl = "/usr/sbin/smartctl";
 
 our $realloc = '50';
-our $pend = '5';
+our $pend = '1';
 
 if ( $hostname =~ /mira/i )
 {
 	$realloc = '200';
-	$pend = '10';
+	$pend = '2';
 }
 
 unless ( -x $smartctl )
