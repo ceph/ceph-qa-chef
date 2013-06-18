@@ -1,3 +1,15 @@
+execute "add autobuild gpg key to apt" do
+  command <<-EOH
+  wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
+  | sudo apt-key add -
+  EOH
+end
+
+execute "apt-get update" do
+  command "apt-get update"
+end
+
+
 package 'lsb-release'
 package 'build-essential'
 package 'sysstat'
@@ -109,6 +121,7 @@ end
 service "ntp" do
   action [:enable,:start]
 end
+
 
 execute "add user_xattr to root mount options in fstab" do
   # fugly but works! which is more than i can say for the "mount"

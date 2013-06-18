@@ -71,14 +71,11 @@ if node[:languages][:ruby][:host_cpu] == "arm"
   end
 end
 
-if node[:platform] == "ubuntu"
-  # for rgw
-  execute "add autobuild gpg key to apt" do
-    command <<-EOH
+execute "add autobuild gpg key to apt" do
+  command <<-EOH
   wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
   | sudo apt-key add -
-    EOH
-  end
+  EOH
 end
 
 if node[:languages][:ruby][:host_cpu] != "arm"
