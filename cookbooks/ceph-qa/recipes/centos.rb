@@ -9,6 +9,7 @@ name=Cent OS 6 Local Qemu Repo
 baseurl=http://apt-mirror.front.sepia.ceph.com/centos6-qemu-kvm/
 gpgcheck=0
 enabled=1
+priority=1
   EOH
 end
 
@@ -29,6 +30,9 @@ end
 execute "Clearing yum cache" do
   command "yum clean all"
 end
+
+#So we can make our repo highest priority
+package 'yum-plugin-priorities'
 
 package 'redhat-lsb'
 package 'sysstat'
@@ -56,7 +60,6 @@ package 'smbios-utils'
 package 'openssl'
 
 package 'libuuid'
-package 'fcgi-devel'
 package 'btrfs-progs'
   
 # for copmiling helpers and such
@@ -108,10 +111,10 @@ package 'ceph-libs' do
   action :remove
 end
 package 'librados2' do
-  version '0.61.4-26.ga8f601d.el6'
+  version '0.61.4-33.g90f5c44.el6'
 end
 package 'librbd1' do
-  version '0.61.4-26.ga8f601d.el6'
+  version '0.61.4-33.g90f5c44.el6'
 end
 package 'qemu-img' do
   version '0.12.1.2-2.355.el6.2.cuttlefish.async'
@@ -128,7 +131,21 @@ end
 package 'genisoimage'
 
 #Rados GW
+
+#Force downgrade of packages doesnt work on older chef, uninstall first.
 package 'httpd' do
+  action :remove
+end
+package 'http-devel' do
+  action :remove
+end
+package 'httpd-tools' do
+  action :remove
+end
+package 'httpd' do
+  version '2.2.15-15.el6.1'
+end
+package 'httpd-tools' do
   version '2.2.15-15.el6.1'
 end
 package 'httpd-devel' do
@@ -137,8 +154,17 @@ end
 package 'mod_ssl' do
   version '2.2.15-15.el6.1'
 end
-package 'mod_fcgid' do
-  version '2.3.7-1.el6'
+package 'fcgi' do
+  version '2.4.0-10.el6'
+end
+package 'fcgi-devel' do
+  version '2.4.0-10.el6'
+end
+package 'fcgi-perl' do
+  version '2.4.0-10.el6'
+end
+package 'mod_fastcgi' do
+  version '2.4.6-2.el6'
 end
 service "httpd" do
   action [ :disable, :stop ]
