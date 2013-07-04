@@ -110,12 +110,8 @@ end
 package 'ceph-libs' do
   action :remove
 end
-package 'librados2' do
-  version '0.61.4-33.g90f5c44.el6'
-end
-package 'librbd1' do
-  version '0.61.4-33.g90f5c44.el6'
-end
+package 'librados2'
+package 'librbd1'
 package 'qemu-img' do
   version '0.12.1.2-2.355.el6.2.cuttlefish.async'
 end
