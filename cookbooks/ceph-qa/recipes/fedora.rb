@@ -1,3 +1,14 @@
+#Network Management causing bind errors on monitors
+#Service method does not work right here either.
+
+execute "Disabling Network manager" do
+  command <<-'EOH'
+  chkconfig network on
+  chkconfig NetworkManager off
+  service NetworkManager stop
+  EOH
+end
+
 package 'redhat-lsb'
 package 'sysstat'
 package 'gdb'
