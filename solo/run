@@ -71,8 +71,8 @@ if [ $centos -gt 0 ]; then
     done
 
     # Individual Packages
-    for package in gcc ruby-devel.x86_64 ruby.x86_64 rubygems.noarch; do
-        installed=$(sudo yum list installed | grep -ic "$package" || true)
+    for package in gcc make automake ruby-devel.x86_64 ruby.x86_64 rubygems.noarch; do
+        installed=$(sudo yum list installed | grep -ic "^$package\." || true)
         if [ $installed -eq 0 ]; then
             echo Installing missing package: "$package"
             sudo yum --nogpgcheck -y install "$package"
