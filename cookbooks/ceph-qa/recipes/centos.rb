@@ -219,7 +219,7 @@ execute "add user ubuntu to group kvm" do
 end
 
 execute "Make raid/smart scripts work on centos" do
-  command "if [ ! -e /usr/bin/lspci ]; then ln -s /sbin/lspci /usr/bin/lspci; fi"
+  command "ln -sf /sbin/lspci /usr/bin/lspci"
 end
 
 directory '/home/ubuntu/.ssh' do
