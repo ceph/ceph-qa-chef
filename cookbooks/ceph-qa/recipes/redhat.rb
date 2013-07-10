@@ -24,14 +24,16 @@ name=RHEL 6 QEMU and CEPH mirror
 baseurl=http://apt-mirror.front.sepia.ceph.com/rhel6-qemu-kvm/
 gpgcheck=0
 enabled=1
+priority=1
   EOH
 end
-
 
 execute "Clearing yum cache" do
   command "yum clean all"
 end
 
+#So we can make our repo highest priority
+package 'yum-plugin-priorities'
 
 package 'redhat-lsb'
 package 'sysstat'
@@ -41,7 +43,7 @@ package 'python-configobj'
 # for running ceph
 package 'libedit'
 package 'openssl098e'
-package 'google-perftools-devel'
+package 'gperftools-devel'
 package 'boost-thread'
 package 'xfsprogs'
 package 'gdisk'
@@ -105,23 +107,19 @@ end
 package 'ceph-libs' do
   action :remove
 end
-package 'librados2' do
-  version '0.61.4-29.gccb3dd5.el6'
-end
-package 'librbd1' do
-  version '0.61.4-29.gccb3dd5.el6'
-end
+package 'librados2'
+package 'librbd1'
 package 'qemu-img' do
-  version '0.12.1.2-2.355.el6.5.ceph'
+  version '0.12.1.2-2.355.el6.2'
 end
 package 'qemu-kvm' do
-  version '0.12.1.2-2.355.el6.5.ceph'
+  version '0.12.1.2-2.355.el6.2'
 end
 package 'qemu-kvm-tools' do
-  version '0.12.1.2-2.355.el6.5.ceph'
+  version '0.12.1.2-2.355.el6.2'
 end
 package 'qemu-guest-agent' do
-  version '0.12.1.2-2.355.el6.5.ceph'
+  version '0.12.1.2-2.355.el6.2'
 end
 package 'genisoimage'
 
