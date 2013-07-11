@@ -50,6 +50,8 @@ package 'parted'
 package 'libgcrypt'
 package 'cryptopp-devel'
 package 'cryptopp'
+package 'fuse'
+package 'fuse-libs'
 
 #ceph deploy
 package 'python-virtualenv'

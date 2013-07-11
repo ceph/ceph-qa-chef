@@ -51,6 +51,8 @@ package 'parted'
 package 'libgcrypt'
 package 'cryptopp-devel'
 package 'cryptopp'
+package 'fuse'
+package 'fuse-libs'
 
 #ceph deploy
 package 'python-virtualenv'
@@ -75,7 +77,8 @@ package 'ant'
 package 'dbench'
 package 'bonnie++'
 package 'tiobench'
-  
+package 'fuse-sshfs'
+
 # used by the xfstests tasks
 package 'libtool'
 package 'automake'
