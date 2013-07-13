@@ -80,7 +80,8 @@ package 'bonnie++'
 package 'tiobench'
 package 'fuse-sshfs'
 package 'iozone'
-  
+package 'fsstress'
+
 # used by the xfstests tasks
 package 'libtool'
 package 'automake'
@@ -223,6 +224,15 @@ end
 execute "Make raid/smart scripts work on centos" do
   command "ln -sf /sbin/lspci /usr/bin/lspci"
 end
+
+execute "FStest ubuntu dir" do
+  command "mkdir -p /usr/lib/ltp/testcases/bin"
+end
+
+execute "Make fsstress same path as ubuntu" do
+  command "ln -sf /usr/bin/fsstress /usr/lib/ltp/testcases/bin/fsstress"
+end
+
 
 directory '/home/ubuntu/.ssh' do
   owner "ubuntu"
