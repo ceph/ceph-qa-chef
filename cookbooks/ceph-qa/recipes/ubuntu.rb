@@ -154,6 +154,11 @@ else
   exit 1
 end
 
+#openmpi-common conflicts with mpitch stuff.
+package 'openmpi-common' do
+  action :remove
+end
+
 package 'libuuid1'
 package 'libfcgi'
 package 'btrfs-tools'
