@@ -17,6 +17,14 @@ EOH
 deb http://gitbuilder.ceph.com/apache2-deb-oneiric-x86_64-basic/ref/master/ oneiric main
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-oneiric-x86_64-basic/ref/master/ oneiric main
 EOH
+  elsif node[:platform_version] == "12.10"
+    if node[:languages][:ruby][:host_cpu] == "arm"
+      # pull from arm repo
+      content <<-EOH
+deb http://gitbuilder.ceph.com/apache2-deb-quantal-arm7l-basic/ref/master/ quantal main
+deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-quantal-arm7l-basic/ref/repo/ quantal main
+EOH
+    end
   else
     # hrm!
   end
