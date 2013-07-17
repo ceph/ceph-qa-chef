@@ -1,0 +1,2 @@
+deb http://ftp.us.debian.org/debian squeeze main
+deb http://backports.debian.org/debian-backports squeeze-backports main
