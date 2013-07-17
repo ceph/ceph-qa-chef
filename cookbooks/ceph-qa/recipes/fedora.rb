@@ -1,12 +1,14 @@
 #Network Management causing bind errors on monitors
 #Service method does not work right here either.
 
-execute "Disabling Network manager" do
-  command <<-'EOH'
-  chkconfig network on
-  chkconfig NetworkManager off
-  service NetworkManager stop
-  EOH
+if !node['hostname'].match(/^(vpm)/)
+  execute "Disabling Network manager" do
+    command <<-'EOH'
+    chkconfig network on
+    chkconfig NetworkManager off
+    service NetworkManager stop
+    EOH
+  end
 end
 
 package 'redhat-lsb'
