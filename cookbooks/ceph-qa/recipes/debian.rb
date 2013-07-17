@@ -5,6 +5,17 @@ execute "add autobuild gpg key to apt" do
   EOH
 end
 
+
+#Setup sources.list
+if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
+  cookbook_file '/etc/apt/sources.list' do
+    source "sources.list.squeeze"
+    mode 0644
+    owner "root"
+    group "root"
+  end
+end
+
 execute "apt-get update" do
   command "apt-get update"
 end
@@ -19,18 +30,37 @@ package 'python-gevent'
 package 'python-dev'
 package 'python-virtualenv'
 package 'libevent-dev'
-package 'fuse-utils'
-package 'libfuse2'
+if node[:platform_version] >= "7.0" and node[:platform_version] < "8.0"
+  package 'fuse'
+  package 'libssl1.0.0'
+  package 'libgoogle-perftools4'
+  package 'libboost-thread1.49.0'
+  package 'cryptsetup-bin'
+  package 'libcrypto++9'
+  package 'iozone3'
+  package 'libmpich2-3'
+  package 'collectl'
+  service "collectl" do
+    action [:disable,:stop]
+  end
+  #NFS servers uport per David Z.
+  package 'nfs-kernel-server'
+end
+if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
+  package 'fuse-utils'
+  package 'libfuse2'
+  package 'libssl0.9.8'
+  package 'libgoogle-perftools0'
+  package 'libboost-thread1.42.0'
+  package 'cryptsetup'
+  package 'libcrypto++8'
+  package 'libmpich2-1.2'
+end
 
 
 # for running ceph
 package 'libedit2'
-package 'libssl1.0.0'
-package 'libgoogle-perftools4'
 
-package 'libboost-thread1.49.0'
-
-package 'cryptsetup-bin'
 package 'xfsprogs'
 package 'gdisk'
 package 'parted'
@@ -38,7 +68,6 @@ package 'parted'
 # for setting BIOS settings
 package 'libsmbios-bin'
 
-package 'libcrypto++9'
 
 package 'libuuid1'
 package 'libfcgi'
@@ -52,13 +81,11 @@ package 'git-core'
 package 'attr'
 package 'dbench'
 package 'bonnie++'
-package 'iozone3'
 package 'tiobench'
 
 package 'valgrind'
 package 'python-nose'
 package 'mpich2'
-package 'libmpich2-3'
 package 'libmpich2-dev'
 package 'ant'
 
@@ -76,10 +103,6 @@ package 'xfslibs-dev'
 #For Mark Nelson:
 package 'sysprof'
 package 'pdsh'
-package 'collectl'
-service "collectl" do
-  action [:disable,:stop]
-end
 
 # for blktrace and seekwatcher
 package 'blktrace'
@@ -216,8 +239,6 @@ execute "add ubuntu to disk group" do
   EOH
 end
 
-#NFS servers uport per David Z.
-package 'nfs-kernel-server'
 
 #Static IP
 package 'ipcalc'
