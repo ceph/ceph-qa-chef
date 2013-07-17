@@ -19,7 +19,9 @@ package 'python-gevent'
 package 'python-dev'
 package 'python-virtualenv'
 package 'libevent-dev'
-package 'fuse'
+package 'fuse-utils'
+package 'libfuse2'
+
 
 # for running ceph
 package 'libedit2'
