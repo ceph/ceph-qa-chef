@@ -27,6 +27,13 @@ if [ $ubuntu -gt 0 ]; then
     done
     if [ -n "$missing" ]; then
         echo "solo-from-scratch: installing missing required packages: $missing" 1>&2
+        aptcheck=$(grep -ic apt-mirror /etc/apt/sources.list || true)
+        if [ $aptcheck -lt 1 ]
+        then
+            sudo sed -i 's/us.archive.ubuntu.com/apt-mirror.front.sepia.ceph.com\/archive.ubuntu.com/g' /etc/apt/sources.list
+            sudo sed -i 's/archive.ubuntu.com/apt-mirror.front.sepia.ceph.com\/archive.ubuntu.com/g' /etc/apt/sources.list
+            sudo sed -i 's/security.ubuntu.com/apt-mirror.front.sepia.ceph.com\/security.ubuntu.com/g' /etc/apt/sources.list
+        fi
         sudo apt-get update
         sudo \
 	    env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
