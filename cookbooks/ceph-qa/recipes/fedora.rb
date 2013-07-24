@@ -182,13 +182,18 @@ end
 #NFS servers uport per David Z.
 package 'nfs-utils'
 
-# Remove requiretty, not visiblepw and set unlimited security/limits.conf soft core value
+# Remove requiretty, not visiblepw and set unlimited security/limits.conf soft core value. Allow authorized_keys2
 execute "Sudoers and security/lmits.conf changes" do
   command <<-'EOH'
     sed -i 's/ requiretty/ !requiretty/g' /etc/sudoers
     sed -i 's/ !visiblepw/ visiblepw/g' /etc/sudoers
     sed -i 's/^#\*.*soft.*core.*0/\*                soft    core            unlimited/g' /etc/security/limits.conf
+    sed -i 's/^AuthorizedKeysFile/#AuthorizedKeysFile/g' /etc/ssh/sshd_config
   EOH
+end
+
+service "sshd" do
+  action [:restart]
 end
 
 file '/ceph-qa-ready' do
