@@ -69,9 +69,14 @@ package 'blktrace'
 package 'numpy'
 package 'python-matplotlib'
   
+#Fedora's qemu causes problems with ceph-deploy tests
+#because of ceph-libs install. Remove at the moment.
+package 'ceph-libs' do
+  action :remove
+end
+
+
 # for qemu:
-package 'qemu-kvm'
-package 'qemu-kvm-tools'
 package 'genisoimage'
 
 # for json_xs to investigate JSON by hand
