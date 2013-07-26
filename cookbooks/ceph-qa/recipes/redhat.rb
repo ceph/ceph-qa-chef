@@ -113,10 +113,18 @@ package 'ceph-libs' do
 end
 package 'librados2'
 package 'librbd1'
-package 'qemu-img'
-package 'qemu-kvm'
-package 'qemu-kvm-tools'
-package 'qemu-guest-agent'
+package 'qemu-img' do
+  version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+end
+package 'qemu-kvm' do
+  version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+end
+package 'qemu-kvm-tools' do
+  version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+end
+package 'qemu-guest-agent' do
+  version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+end
 package 'genisoimage'
 
 # for json_xs to investigate JSON by hand
