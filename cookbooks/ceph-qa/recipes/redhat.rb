@@ -24,7 +24,7 @@ name=RHEL 6 QEMU and CEPH mirror
 baseurl=http://apt-mirror.front.sepia.ceph.com/rhel6-qemu-kvm/
 gpgcheck=0
 enabled=1
-priority=1
+priority=2
   EOH
 end
 

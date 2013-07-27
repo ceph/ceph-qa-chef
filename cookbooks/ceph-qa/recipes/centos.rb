@@ -9,7 +9,7 @@ name=Cent OS 6 Local Qemu Repo
 baseurl=http://apt-mirror.front.sepia.ceph.com/centos6-qemu-kvm/
 gpgcheck=0
 enabled=1
-priority=1
+priority=2
   EOH
 end
 
