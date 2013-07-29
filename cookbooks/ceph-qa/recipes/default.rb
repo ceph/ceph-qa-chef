@@ -4,6 +4,17 @@ if !node['hostname'].match(/^(plana|burnupi|mira|vpm|tala|saya)/)
 end
 
 
+# high max open files
+file '/etc/security/limits.d/ubuntu.conf' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  content <<-EOH
+    ubuntu hard nofile 16384
+  EOH
+end
+
+
 if node[:platform] == "ubuntu"
   include_recipe "ceph-qa::ubuntu"
 end
