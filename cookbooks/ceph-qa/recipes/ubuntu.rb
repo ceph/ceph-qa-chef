@@ -1,3 +1,8 @@
+#Fail if ubuntu != 1000 UID
+if node['etc']['passwd']['ubuntu']['uid'] != 1000
+ raise "The ubuntu user should be UID of 1000. It is not. Re-image this machine."
+end
+
 # remove ceph packages (if any)
 #  FIXME: possibly remove this when teuthology starts using debs.
 execute "remove ceph packages" do
