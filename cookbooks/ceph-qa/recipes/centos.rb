@@ -20,7 +20,7 @@ file '/etc/yum.repos.d/rpmforge.repo' do
   content <<-EOH2
 [rpmforge]
 name=Red Hat Enterprise $releasever - RPMforge.net - dag
-baseurl=http://apt.sw.be/redhat/el6/en/x86_64/dag
+baseurl=http://apt-mirror.front.sepia.ceph.com/rpmforge/
 gpgcheck=0
 enabled=1
 protect=0
