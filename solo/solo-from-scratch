@@ -49,6 +49,11 @@ if [ $ubuntu -gt 0 ]; then
 fi
 
 if [ $centos -gt 0 ]; then
+    sudo sed -i 's/baseurl=http:\/\/vault.centos.org\//baseurl=http:\/\/apt-mirror.front.sepia.ceph.com\/centosvault\//g' /etc/yum.repos.d/Cent* || true
+    sudo sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/Cent* || true
+    sudo sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/Cent* || true
+    sudo sed -i 's/http:\/\/mirror.centos.org\/centos\//http:\/\/apt-mirror.front.sepia.ceph.com\/centos\//g' /etc/yum.repos.d/Cent* || true
+    sudo sed -i 's/^gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/Cent* || true
     #Individual Packages
     for package in git; do
         installed=$(sudo yum list installed | grep -ic "^$package" || true)
