@@ -30,7 +30,7 @@ if [ $ubuntu -gt 0 ]; then
         aptcheck=$(grep -ic apt-mirror /etc/apt/sources.list || true)
         if [ $aptcheck -lt 1 ]
         then
-            cp -n /etc/apt/sources.list /etc/apt/sources.list.orig
+            sudo cp -n /etc/apt/sources.list /etc/apt/sources.list.orig
             sudo sed -i 's@http://us.archive.ubuntu.com@http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com@g' /etc/apt/sources.list
             sudo sed -i 's@http://archive.ubuntu.com@http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com@g' /etc/apt/sources.list
             sudo sed -i 's@http://security.ubuntu.com@http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com@g' /etc/apt/sources.list
