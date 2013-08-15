@@ -200,6 +200,7 @@ package 'bc'
 package 'xfsdump'
 package 'dmapi'
 package 'xfslibs-dev'
+package 'libattr1-dev'
 
 #For Mark Nelson:
 if node[:languages][:ruby][:host_cpu] != "arm"
