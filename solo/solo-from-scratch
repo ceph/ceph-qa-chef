@@ -31,9 +31,9 @@ if [ $ubuntu -gt 0 ]; then
         if [ $aptcheck -lt 1 ]
         then
             cp -n /etc/apt/sources.list /etc/apt/sources.list.orig
-            sudo sed -i 's@us.archive.ubuntu.com@apt-mirror.front.sepia.ceph.com/archive.ubuntu.com@g' /etc/apt/sources.list
-            sudo sed -i 's@archive.ubuntu.com@apt-mirror.front.sepia.ceph.com/archive.ubuntu.com@g' /etc/apt/sources.list
-            sudo sed -i 's@security.ubuntu.com@apt-mirror.front.sepia.ceph.com/security.ubuntu.com@g' /etc/apt/sources.list
+            sudo sed -i 's@http://us.archive.ubuntu.com@http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com@g' /etc/apt/sources.list
+            sudo sed -i 's@http://archive.ubuntu.com@http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com@g' /etc/apt/sources.list
+            sudo sed -i 's@http://security.ubuntu.com@http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com@g' /etc/apt/sources.list
         fi
         sudo apt-get update
         sudo \
