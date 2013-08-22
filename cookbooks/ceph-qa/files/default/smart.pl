@@ -24,11 +24,13 @@ my $smartctl = "/usr/sbin/smartctl";
 
 our $realloc = '50';
 our $pend = '1';
+our $uncorrect = '1';
 
 if ( $hostname =~ /mira/i )
 {
 	$realloc = '200';
-	$pend = '2';
+	$pend = '1';
+        $uncorrect = '1';
 }
 
 unless ( -x $smartctl )
@@ -68,7 +70,7 @@ sub smartctl
 			$crit = 1;
 			push(@out,$message);
 		}
-	        if ( $_ =~ /_sector/i )
+	        if (( $_ =~ /_sector/i ) || ( $_ =~ /_uncorrect/i ))
 	        {
 	                my @sector = split;
 	                if ( $sector[1] =~ /reallocated/i  )
@@ -79,12 +81,16 @@ sub smartctl
 	                {
 	                        $type = "pending";
 	                }
+                        if ( $sector[1] =~ /d_uncorrect/i  )
+                        {
+                                $type = "uncorrect";
+                        }
 	                foreach ( $sector[9] )
 	                {
 	                        my $count = $_;
 	                        $message = "Drive $drive has $count $type sectors";
 
-	                        if ( ( $type =~ /reallocated/i && $count > $realloc ) && ( $type =~ /pending/i && $count > $pend ) )
+	                        if ( ( $type =~ /reallocated/i && $count > $realloc ) && ( $type =~ /pending/i && $count > $pend ) && ( $type =~ /pending/i && $count > $uncorrect  ) )
 	                        {
 					$crit = 1;
 					push(@out,$message);
@@ -100,6 +106,11 @@ sub smartctl
 					{
 	        				$crit = 1;
 	        				push(@out,$message);
+					}
+					if ( $type =~ /uncorrect/i && $count > $uncorrect )
+					{
+						$crit = 1;
+						push(@out,$message);
 					}
 	                	}
 			}
