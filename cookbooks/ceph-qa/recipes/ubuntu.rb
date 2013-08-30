@@ -206,6 +206,7 @@ package 'libattr1-dev'
 if node[:languages][:ruby][:host_cpu] != "arm"
   package 'sysprof'
 end
+package 'vim'
 package 'pdsh'
 package 'collectl'
 service "collectl" do
