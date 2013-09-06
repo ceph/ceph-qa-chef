@@ -603,6 +603,12 @@ execute "Restarting resolvdns" do
   EOH
 end
 
+execute "Enabling auto-fsck fix to prevent boot hangup" do
+  command <<-'EOH'
+    sudo sed -i 's/FSCKFIX=no/FSCKFIX=yes/g' /etc/default/rcS || true
+  EOH
+end
+
 bash "ssh_max_sessions" do
   user "root"
   cwd "/etc/ssh"
