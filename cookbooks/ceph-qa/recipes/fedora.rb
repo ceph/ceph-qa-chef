@@ -79,6 +79,9 @@ end
 # for qemu:
 package 'genisoimage'
 
+package 'python-pip'
+package 'libevent-devel'
+
 # for json_xs to investigate JSON by hand
 package 'perl-JSON'
   
