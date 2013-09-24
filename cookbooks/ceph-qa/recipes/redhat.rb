@@ -64,7 +64,6 @@ package 'smbios-utils'
 
 package 'openssl'
 package 'libuuid'
-package 'fcgi-devel'
 package 'btrfs-progs'
   
  
@@ -126,6 +125,48 @@ package 'qemu-guest-agent' do
   version '0.12.1.2-2.355.el6.2.cuttlefish.async'
 end
 package 'genisoimage'
+
+
+#Rados GW
+
+#Force downgrade of packages doesnt work on older chef, uninstall first.
+package 'httpd' do
+  action :remove
+end
+package 'http-devel' do
+  action :remove
+end
+package 'httpd-tools' do
+  action :remove
+end
+package 'httpd' do
+  version '2.2.15-15.el6.1'
+end
+package 'httpd-tools' do
+  version '2.2.15-15.el6.1'
+end
+package 'httpd-devel' do
+  version '2.2.15-15.el6.1'
+end
+package 'mod_ssl' do
+  version '2.2.15-15.el6.1'
+end
+package 'fcgi' do
+  version '2.4.0-10.el6'
+end
+package 'fcgi-devel' do
+  version '2.4.0-10.el6'
+end
+package 'fcgi-perl' do
+  version '2.4.0-10.el6'
+end
+package 'mod_fastcgi' do
+  version '2.4.6-2.el6'
+end
+service "httpd" do
+  action [ :disable, :stop ]
+end
+
 
 package 'python-pip'
 package 'libevent-devel'
