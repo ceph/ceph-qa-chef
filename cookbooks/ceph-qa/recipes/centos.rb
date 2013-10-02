@@ -163,7 +163,7 @@ package 'fcgi-perl' do
   version '2.4.0-10.el6'
 end
 package 'mod_fastcgi' do
-  version '2.4.6-2.el6'
+  version '2.4.7-1.el6'
 end
 service "httpd" do
   action [ :disable, :stop ]
