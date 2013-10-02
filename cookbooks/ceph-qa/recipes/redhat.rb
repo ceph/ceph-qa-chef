@@ -140,28 +140,19 @@ package 'httpd-tools' do
   action :remove
 end
 package 'httpd' do
-  version '2.2.15-15.el6.1'
+  version '2.2.22-1.ceph.el6'
 end
 package 'httpd-tools' do
-  version '2.2.15-15.el6.1'
+  version '2.2.22-1.ceph.el6'
 end
 package 'httpd-devel' do
-  version '2.2.15-15.el6.1'
+  version '2.2.22-1.ceph.el6'
 end
 package 'mod_ssl' do
-  version '2.2.15-15.el6.1'
-end
-package 'fcgi' do
-  version '2.4.0-10.el6'
-end
-package 'fcgi-devel' do
-  version '2.4.0-10.el6'
-end
-package 'fcgi-perl' do
-  version '2.4.0-10.el6'
+  version '2.2.22-1.ceph.el6'
 end
 package 'mod_fastcgi' do
-  version '2.4.7-1.el6'
+  version '2.4.7-1.ceph.el6'
 end
 service "httpd" do
   action [ :disable, :stop ]
