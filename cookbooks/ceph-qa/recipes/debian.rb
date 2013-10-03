@@ -305,7 +305,8 @@ end
 
 execute "Fix PATH in /etc/profile" do
   command <<-'EOH'
-    sed -i 's/\/usr\/games/\/usr\/games:\/usr\/sbin/g' /etc/profile
+    sed -i 's/\/usr\/games"/\/usr\/games:\/usr\/sbin"/g' /etc/profile
+    if ! grep -q '/usr/sbin' /home/ubuntu/.bashrc; then sed -i '1iexport PATH=$PATH:/usr/sbin\n' /home/ubuntu/.bashrc; fi 
   EOH
 end
 
