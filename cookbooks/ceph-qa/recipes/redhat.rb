@@ -13,15 +13,73 @@ enabled=1
 end
 
 #Ceph/qemu Repo
+
 #Local Repo
 file '/etc/yum.repos.d/qemu-ceph.repo' do
   owner 'root'
   group 'root'
   mode '0644'
   content <<-EOH
-[rhel-6-qemu-local]
-name=RHEL 6 QEMU and CEPH mirror
-baseurl=http://apt-mirror.front.sepia.ceph.com/rhel6-qemu-kvm/
+[centos6-qemu-ceph]
+name=Cent OS 6 Local Qemu Repo
+baseurl=http://ceph.com/packages/ceph-extras/rpm/rhel6/x86_64/
+gpgcheck=0
+enabled=1
+priority=2
+  EOH
+end
+
+
+file '/etc/yum.repos.d/apache-ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[centos6-apache-ceph]
+name=Cent OS 6 Local apache Repo
+baseurl=http://gitbuilder.ceph.com/apache2-rpm-rhel6-x86_64-basic/ref/master/
+gpgcheck=0
+enabled=1
+priority=2
+  EOH
+end
+
+file '/etc/yum.repos.d/fcgi-ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[centos6-fcgi-ceph]
+name=Cent OS 6 Local fastcgi Repo
+baseurl=http://gitbuilder.ceph.com/mod_fastcgi-rpm-rhel6-x86_64-basic/ref/master/
+gpgcheck=0
+enabled=1
+priority=2
+  EOH
+end
+
+file '/etc/yum.repos.d/misc-ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[centos6-misc-ceph]
+name=Cent OS 6 Local misc Repo
+baseurl=http://apt-mirror.front.sepia.ceph.com/misc-rpms/
+gpgcheck=0
+enabled=1
+priority=2
+  EOH
+end
+
+file '/etc/yum.repos.d/ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[centos6-ceph]
+name=Cent OS 6 Local ceph Repo
+baseurl=http://gitbuilder.ceph.com/ceph-rpm-centos6-x86_64-basic/ref/cuttlefish/x86_64/
 gpgcheck=0
 enabled=1
 priority=2
@@ -139,6 +197,9 @@ end
 package 'httpd-tools' do
   action :remove
 end
+package 'mod_ssl' do
+  version '2.2.22-1.ceph.el6'
+end
 package 'httpd' do
   version '2.2.22-1.ceph.el6'
 end
@@ -146,9 +207,6 @@ package 'httpd-tools' do
   version '2.2.22-1.ceph.el6'
 end
 package 'httpd-devel' do
-  version '2.2.22-1.ceph.el6'
-end
-package 'mod_ssl' do
   version '2.2.22-1.ceph.el6'
 end
 package 'mod_fastcgi' do
