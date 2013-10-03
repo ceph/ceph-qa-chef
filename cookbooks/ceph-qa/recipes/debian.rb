@@ -303,6 +303,12 @@ if !node['hostname'].match(/^(vpm)/)
   end
 end
 
+execute "Fix PATH in /etc/profile" do
+  command <<-'EOH'
+    sed -i 's/\/usr\/games/\/usr\/games:\/usr\/sbin/g' /etc/profile
+  EOH
+end
+
 #Nagios sudo (for raid utilities)
 file '/etc/sudoers.d/90-nagios' do
   owner 'root'
