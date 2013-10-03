@@ -1,5 +1,18 @@
 # TODO once we're building more than squeeze, parameterize distro name
 
+#Apt priority
+file '/etc/apt/preferences.d/ceph.pref' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+    content <<-EOH
+Package: *
+Pin: origin gitbuilder.ceph.com
+Pin-Priority: 999
+EOH
+end
+
+
 file '/etc/apt/sources.list.d/radosgw.list' do
   owner 'root'
   group 'root'
