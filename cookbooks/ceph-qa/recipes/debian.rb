@@ -16,6 +16,42 @@ if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
   end
 end
 
+
+#Apt priority
+file '/etc/apt/preferences.d/ceph.pref' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+    content <<-EOH
+Package: *
+Pin: origin gitbuilder.ceph.com
+Pin-Priority: 999
+EOH
+end
+
+#Rados GW:
+file '/etc/apt/sources.list.d/radosgw.list' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+
+  if node[:platform_version] >= "7.0" and node[:platform_version] < "8.0"
+    # pull from wheezy gitbuilder
+    content <<-EOH
+deb http://gitbuilder.ceph.com/apache2-deb-wheezy-x86_64-basic/ref/master/ wheezy main
+deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-wheezy-x86_64-basic/ref/master/ wheezy main
+EOH
+  elsif node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
+    # pull from squeeze gitbuilder
+    content <<-EOH
+deb http://gitbuilder.ceph.com/apache2-deb-squeeze-x86_64-basic/ref/master/ squeeze main
+deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-squeeze-x86_64-basic/ref/master/ squeeze main
+EOH
+  else
+    # hrm!
+  end
+end
+
 execute "apt-get update" do
   command "apt-get update"
 end
@@ -55,6 +91,19 @@ if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
   package 'cryptsetup'
   package 'libcrypto++8'
   package 'libmpich2-1.2'
+end
+
+#RADOS GW
+package 'apache2' do
+  action :upgrade
+end
+package 'libapache2-mod-fastcgi' do
+  action :upgrade
+end
+package 'libfcgi0ldbl'
+
+service "apache2" do
+  action [ :disable, :stop ]
 end
 
 
