@@ -222,6 +222,13 @@ service "iptables" do
   action [:disable,:stop]
 end
 
+#chckconfig doesnt appear to immediately remove firewall rules after stopping/disabling:
+execute "Disabling Firewall" do
+  command <<-'EOH'
+systemctl stop firewalld.service | true
+  EOH
+end
+
 cookbook_file '/etc/security/limits.d/remote.conf' do
   source "remote.conf"
   mode 0644
