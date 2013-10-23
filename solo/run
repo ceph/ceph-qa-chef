@@ -40,6 +40,8 @@ if [ $ubuntu -gt 0 ]; then
     fi
     if [ $debian -gt 0 ]
     then
+        sudo sed -i 's/^\# en_US/en_US/g' /etc/locale.gen || true
+        sudo /usr/sbin/locale-gen en_US.UTF-8 || true
         sudo -E "$CHEF_BIN" -c solo.rb -j solo.json
     else
         sudo "$CHEF_BIN" -c solo.rb -j solo.json
