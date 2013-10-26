@@ -121,13 +121,13 @@ package 'python-gevent'
 # for running ceph
 package 'libedit2'
 package 'libssl0.9.8'
-if node[:platform_version] == "12.10"
+if node[:platform_version] >= "12.10"
   package 'libgoogle-perftools4'
 else
   package 'libgoogle-perftools0'
 end
 
-if node[:platform_version] == "12.10"
+if node[:platform_version] >= "12.10"
   package 'libboost-thread1.49.0'
 else
   package 'libboost-thread1.46.1'
@@ -148,7 +148,7 @@ when "ubuntu"
   case node[:platform_version]
   when "10.10"
     package 'libcrypto++8'
-  when "11.10", "12.04", "12.10"
+  when "11.10", "12.04", "12.10", "13.04", "13.10"
     package 'libcrypto++9'
   else
     Chef::Log.fatal("Unknown ubuntu release: #{node[:platform_version]}")
@@ -177,10 +177,12 @@ package 'attr'
 package 'dbench'
 package 'bonnie++'
 package 'iozone3'
-package 'tiobench'
+if node[:platform_version] <= "13.04"
+  package 'tiobench'
+end
 
 # No ltp-kernel-test package on quantal
-if node[:platform_version] != "12.10"
+if node[:platform_version] <= "12.10"
   package 'ltp-kernel-test'
 end
 package 'valgrind'
@@ -220,7 +222,11 @@ package 'python-matplotlib'
 package 'mencoder'
 
 # for qemu
-package 'kvm'
+if node[:platform_version] >= "12.10"
+  package 'qemu-system-x86'
+else
+  package 'kvm'
+end
 package 'genisoimage'
 
 # for json_xs to investigate JSON by hand
