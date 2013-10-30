@@ -90,6 +90,9 @@ if [ $centos -gt 0 ]; then
     fi
 
     if [ ! -e "$CHEF_BIN" ]; then
+        #Mime-types 2.0 requires ruby 1.9.2 which is not included on RHEL/centos.
+        #Pre-install 1.25 so it doesn't attempt to grab 2.0 as a dependency.
+        sudo gem install --no-rdoc --no-ri mime-types -v 1.25
         sudo gem install --no-rdoc --no-ri chef
     fi
 
