@@ -182,7 +182,7 @@ if node[:platform_version] <= "13.04"
 end
 
 # No ltp-kernel-test package on quantal
-if node[:platform_version] <= "12.04"
+if node[:platform_version] < "12.10"
   package 'ltp-kernel-test'
 end
 package 'valgrind'
@@ -222,7 +222,7 @@ package 'python-matplotlib'
 package 'mencoder'
 
 # for qemu
-if node[:platform_version] >= "12.10"
+if node[:platform_version] >= "13.04"
   package 'qemu-system-x86'
 else
   package 'kvm'
