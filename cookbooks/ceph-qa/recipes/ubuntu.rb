@@ -14,6 +14,9 @@ end
 execute "remove ceph sources" do
   command 'rm -f /etc/apt/sources.list.d/ceph.list'
 end
+execute "remove ceph-extras.list" do
+  command 'rm -f /etc/apt/sources.list.d/ceph-extras.list'
+end
 
 #Setup calxeda repo for quantal arm nodes.
 if node[:languages][:ruby][:host_cpu] == "arm"
@@ -80,6 +83,37 @@ execute "add autobuild gpg key to apt" do
   command <<-EOH
   wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
   | sudo apt-key add -
+  EOH
+end
+
+#tgt:
+file '/etc/apt/sources.list.d/ceph-extras.list' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  only_if { node[:platform_version] == "12.04" }
+  content <<-EOH
+    deb http://ceph.com/packages/ceph-extras/debian/ precise main
+  EOH
+end
+
+file '/etc/apt/sources.list.d/ceph-extras.list' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  only_if { node[:platform_version] == "12.10" }
+  content <<-EOH
+    deb http://ceph.com/packages/ceph-extras/debian/ quantal main
+  EOH
+end
+
+file '/etc/apt/sources.list.d/ceph-extras.list' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  only_if { node[:platform_version] == "13.04" }
+  content <<-EOH
+    deb http://ceph.com/packages/ceph-extras/debian/ raring main
   EOH
 end
 
@@ -238,6 +272,11 @@ package 'xml-twig-tools'
 package 'default-jdk'
 package 'junit4'
 
+#tgt
+package 'tgt' do
+  options "--allow-unauthenticated"
+end
+package 'open-iscsi'
 # for disk/etc monitoring
 package 'smartmontools'
 package 'nagios-nrpe-server'

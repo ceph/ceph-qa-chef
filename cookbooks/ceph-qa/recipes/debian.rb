@@ -5,7 +5,6 @@ execute "add autobuild gpg key to apt" do
   EOH
 end
 
-
 #Setup sources.list
 if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
   cookbook_file '/etc/apt/sources.list' do
@@ -181,6 +180,12 @@ package 'cifs-utils'
 
 #DistCC for arm
 package 'distcc'
+
+#tgt
+package 'tgt' do
+  options "--allow-unauthenticated"
+end
+package 'open-iscsi'
 
 package 'ntp'
 
