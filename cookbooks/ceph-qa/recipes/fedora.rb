@@ -11,6 +11,13 @@ if !node['hostname'].match(/^(vpm)/)
   end
 end
 
+cookbook_file '/etc/default/grub' do
+  source "grub"
+  mode 0644
+  owner "root"
+  group "root"
+end
+
 if node[:platform_version] == "18"
   file '/etc/yum.repos.d/apache-ceph.repo' do
     owner 'root'
