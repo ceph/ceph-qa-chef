@@ -35,14 +35,20 @@ if [ $ubuntu -gt 0 ]; then
 
     CHEF_BIN_DIR="${HOME}/.gem/ruby/1.9.1/bin"
     CHEF_BIN="$CHEF_BIN_DIR/chef-solo"
-    if [ ! -e "$CHEF_BIN" ]; then
-        gem1.9.1 install --no-rdoc --no-ri mime-types -v "<2.0"
-        gem1.9.1 install --no-rdoc --no-ri --user-install chef
-    fi
     if [ $debian -gt 0 ]
     then
         sudo sed -i 's/^\# en_US/en_US/g' /etc/locale.gen || true
         sudo /usr/sbin/locale-gen en_US.UTF-8 || true
+        export LANG=en_US.UTF-8
+        export LANGUAGE=en_US.UTF-8
+        export LC_ALL=en_US.UTF-8
+    fi
+    if [ ! -e "$CHEF_BIN" ]; then
+        sudo gem1.9.1 install --no-rdoc --no-ri mime-types -v "<2.0"
+        sudo gem1.9.1 install --no-rdoc --no-ri --user-install chef
+    fi
+    if [ $debian -gt 0 ]
+    then
         sudo -E "$CHEF_BIN" -c solo.rb -j solo.json
     else
         sudo "$CHEF_BIN" -c solo.rb -j solo.json
