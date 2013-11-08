@@ -36,6 +36,7 @@ if [ $ubuntu -gt 0 ]; then
     CHEF_BIN_DIR="${HOME}/.gem/ruby/1.9.1/bin"
     CHEF_BIN="$CHEF_BIN_DIR/chef-solo"
     if [ ! -e "$CHEF_BIN" ]; then
+        gem1.9.1 install --no-rdoc --no-ri mime-types -v "<2.0"
         gem1.9.1 install --no-rdoc --no-ri --user-install chef
     fi
     if [ $debian -gt 0 ]
@@ -92,7 +93,7 @@ if [ $centos -gt 0 ]; then
     if [ ! -e "$CHEF_BIN" ]; then
         #Mime-types 2.0 requires ruby 1.9.2 which is not included on RHEL/centos.
         #Pre-install 1.25 so it doesn't attempt to grab 2.0 as a dependency.
-        sudo gem install --no-rdoc --no-ri mime-types -v 1.25
+        sudo gem install --no-rdoc --no-ri mime-types -v "<2.0"
         sudo gem install --no-rdoc --no-ri chef
     fi
 
