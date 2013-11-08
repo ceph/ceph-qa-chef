@@ -42,10 +42,10 @@ if [ $ubuntu -gt 0 ]; then
         export LANG=en_US.UTF-8
         export LANGUAGE=en_US.UTF-8
         export LC_ALL=en_US.UTF-8
+        gem1.9.1 install --no-rdoc --no-ri mime-types -v "<2.0
     fi
     if [ ! -e "$CHEF_BIN" ]; then
-        sudo gem1.9.1 install --no-rdoc --no-ri mime-types -v "<2.0"
-        sudo gem1.9.1 install --no-rdoc --no-ri --user-install chef
+        gem1.9.1 install --no-rdoc --no-ri --user-install chef
     fi
     if [ $debian -gt 0 ]
     then
