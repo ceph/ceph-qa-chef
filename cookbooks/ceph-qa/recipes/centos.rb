@@ -231,6 +231,10 @@ package 'perl-XML-Twig'
 package 'java-1.7.0-openjdk-devel'
 package 'junit4'
   
+# tgt & open-iscsi
+package 'scsi-target-utils'
+package 'iscsi-initiator-utils'
+
 # for disk/etc monitoring
 package 'smartmontools'
 package 'ntp'
