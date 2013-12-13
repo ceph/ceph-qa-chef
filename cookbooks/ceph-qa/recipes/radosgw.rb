@@ -60,9 +60,3 @@ package 'libfcgi0ldbl'
 service "apache2" do
   action [ :disable, :stop ]
 end
-
-# for s3-tests
-package 'python-pip'
-package 'python-virtualenv'
-package 'python-dev'
-package 'libevent-dev'
