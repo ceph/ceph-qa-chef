@@ -667,10 +667,17 @@ bash "ssh_max_sessions" do
   not_if {File.read("/etc/ssh/sshd_config") =~ /MaxSessions/}
 end
 
-service "ssh" do
-  action [:restart]
+if node[:platform_version] >= "13.04"
+  execute "Restarting SSH via service on Saucy and above" do
+    command <<-'EOH'
+      sudo service ssh restart
+    EOH
+  end
+else
+  service "ssh" do
+    action [:restart]
+  end
 end
-
 
 file '/ceph-qa-ready' do
   content "ok\n"
