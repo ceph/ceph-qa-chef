@@ -3,6 +3,7 @@ if node['etc']['passwd']['ubuntu']['uid'] != 1000
  raise "The ubuntu user should be UID of 1000. It is not. Re-image this machine."
 end
 
+
 # remove ceph packages (if any)
 #  FIXME: possibly remove this when teuthology starts using debs.
 execute "remove ceph packages" do
@@ -86,36 +87,16 @@ execute "add autobuild gpg key to apt" do
   EOH
 end
 
-#tgt:
+#tgt/libleveldb:
+tgt_content = "deb http://ceph.com/packages/ceph-extras/debian/ #{node.lsb.codename} main\n"
 file '/etc/apt/sources.list.d/ceph-extras.list' do
   owner 'root'
   group 'root'
   mode '0644'
   only_if { node[:platform_version] == "12.04" }
-  content <<-EOH
-    deb http://ceph.com/packages/ceph-extras/debian/ precise main
-  EOH
+  content tgt_content
 end
 
-file '/etc/apt/sources.list.d/ceph-extras.list' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  only_if { node[:platform_version] == "12.10" }
-  content <<-EOH
-    deb http://ceph.com/packages/ceph-extras/debian/ quantal main
-  EOH
-end
-
-file '/etc/apt/sources.list.d/ceph-extras.list' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  only_if { node[:platform_version] == "13.04" }
-  content <<-EOH
-    deb http://ceph.com/packages/ceph-extras/debian/ raring main
-  EOH
-end
 
 # for s3-tests
 package 'python-pip'
