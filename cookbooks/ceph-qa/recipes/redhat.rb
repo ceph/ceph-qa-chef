@@ -171,16 +171,16 @@ end
 package 'librados2'
 package 'librbd1'
 package 'qemu-img' do
-  version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+  version '0.12.1.2-2.415.el6.3ceph'
 end
 package 'qemu-kvm' do
-  version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+  version '0.12.1.2-2.415.el6.3ceph'
 end
 package 'qemu-kvm-tools' do
-  version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+  version '0.12.1.2-2.415.el6.3ceph'
 end
 package 'qemu-guest-agent' do
-  version '0.12.1.2-2.355.el6.2.cuttlefish.async'
+  version '0.12.1.2-2.415.el6.3ceph'
 end
 package 'genisoimage'
 
