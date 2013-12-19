@@ -104,6 +104,24 @@ package 'python-virtualenv'
 package 'python-dev'
 package 'libevent-dev'
 
+#CPAN
+package 'perl'
+directory '/home/ubuntu/.cpan/CPAN/' do
+  owner "root"
+  group "root"
+  mode "0755"
+  recursive true
+end
+cookbook_file '/home/ubuntu/.cpan/CPAN/MyConfig.pm' do
+  source "CPANConfig.pm"
+  mode 0755
+  owner "root"
+  group "root"
+end
+execute "Installing CPAN Amazon::S3" do
+  command "cpan  Amazon::S3"
+end
+
 # do radosgw recipe first, because it updates the apt sources and runs
 # apt-get update for us too.
 if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10" or node[:platform_version] == "12.04" or node[:platform_version] == "12.10")
