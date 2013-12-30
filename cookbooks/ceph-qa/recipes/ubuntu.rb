@@ -109,17 +109,31 @@ package 'perl'
 package 'libwww-perl'
 
 directory '/home/ubuntu/.cpan/CPAN/' do
-  owner "root"
-  group "root"
+  owner "ubuntu"
+  group "ubuntu"
   mode "0755"
   recursive true
 end
 cookbook_file '/home/ubuntu/.cpan/CPAN/MyConfig.pm' do
   source "CPANConfig.pm"
   mode 0755
+  owner "ubuntu"
+  group "ubuntu"
+end
+
+directory '/root/.cpan/CPAN/' do
+  owner "root"
+  group "root"
+  mode "0755"
+  recursive true
+end
+cookbook_file '/root/.cpan/CPAN/MyConfig.pm' do
+  source "CPANConfig.pm"
+  mode 0755
   owner "root"
   group "root"
 end
+
 
 # do radosgw recipe first, because it updates the apt sources and runs
 # apt-get update for us too.
