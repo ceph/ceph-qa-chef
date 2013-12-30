@@ -629,6 +629,13 @@ file '/etc/sudoers.d/90-nagios' do
   EOH
 end
 
+#Modules @ Boot
+cookbook_file '/etc/modules' do
+  source "modules"
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
 
 #Nagios nrpe config
 cookbook_file '/etc/nagios/nrpe.cfg' do
