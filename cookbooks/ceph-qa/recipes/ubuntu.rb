@@ -120,9 +120,6 @@ cookbook_file '/home/ubuntu/.cpan/CPAN/MyConfig.pm' do
   owner "root"
   group "root"
 end
-execute "Installing CPAN Amazon::S3" do
-  command "cpan  Amazon::S3"
-end
 
 # do radosgw recipe first, because it updates the apt sources and runs
 # apt-get update for us too.
@@ -606,6 +603,9 @@ if !node['hostname'].match(/^(vpm)/)
   end
 end
 
+execute "Installing CPAN Amazon::S3" do
+  command "cpan  Amazon::S3"
+end
 
 #Static DNS
 file '/etc/resolvconf/resolv.conf.d/base' do
