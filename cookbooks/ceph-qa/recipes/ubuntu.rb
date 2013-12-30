@@ -106,6 +106,8 @@ package 'libevent-dev'
 
 #CPAN
 package 'perl'
+package 'libwww-perl'
+
 directory '/home/ubuntu/.cpan/CPAN/' do
   owner "root"
   group "root"
