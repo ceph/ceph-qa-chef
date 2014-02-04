@@ -12,11 +12,8 @@ end
 execute "remove /etc/ceph" do
   command 'rm -rf /etc/ceph'
 end
-execute "remove ceph sources" do
-  command 'rm -f /etc/apt/sources.list.d/ceph.list'
-end
-execute "remove ceph-extras.list" do
-  command 'rm -f /etc/apt/sources.list.d/ceph-extras.list'
+execute "remove old source entries" do
+  command 'rm -f /etc/apt/sources.list.d/*.list'
 end
 
 #Setup calxeda repo for quantal arm nodes.
@@ -95,6 +92,10 @@ file '/etc/apt/sources.list.d/ceph-extras.list' do
   mode '0644'
   only_if { node[:platform_version] == "12.04" }
   content tgt_content
+end
+
+execute "add gpg key" do
+  command "apt-key adv --keyserver keyserver.ubuntu.com --recv-key 7EBFDD5D17ED316D"
 end
 
 
