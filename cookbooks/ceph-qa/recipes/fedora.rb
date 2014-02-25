@@ -91,6 +91,9 @@ package 'parted'
 package 'libgcrypt'
 package 'cryptopp-devel'
 package 'cryptopp'
+package 'leveldb' do
+  action :upgrade
+end
 
 #ceph deploy
 package 'python-virtualenv'
