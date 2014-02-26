@@ -2,7 +2,8 @@
 set -e
 
 cd "$(dirname "$0")"
-distro=$(python distro.py)
+
+distro=$(python -c 'import platform; distro = platform.dist()[0]; print distro.lower().rstrip()')
 
 #Shell can't do string comparosin like bash so doing it awkwardly:
 centos=$(echo $distro | grep -ic -e centos -e redhat -e fedora || true)

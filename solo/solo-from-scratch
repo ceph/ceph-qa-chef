@@ -9,10 +9,7 @@ set -e
 
 cd "$(dirname "$0")"
 
-wget  -O distro.py 'http://ceph.com/git/?p=ceph-qa-chef.git;a=blob_plain;f=solo/distro.py;hb=HEAD'
-chmod 755 distro.py
-distro=$(python distro.py)
-rm distro.py
+distro=$(python -c 'import platform; distro = platform.dist()[0]; print distro.lower().rstrip()')
 
 #Shell can't do string comparosin like bash so doing it awkwardly:
 centos=$(echo $distro | grep -ic -e centos -e redhat -e fedora || true)
@@ -76,5 +73,8 @@ cleanup () {
 trap cleanup INT TERM EXIT
 git init
 #git pull https://github.com/NewDreamNetwork/ceph-qa-chef.git
-git pull http://ceph.com/git/ceph-qa-chef.git
+#git pull http://ceph.com/git/ceph-qa-chef.git
+
+#Avoid pulling via HTTP to reduce apache load
+git pull git://ceph.com/ceph-qa-chef.git
 ./solo/run
