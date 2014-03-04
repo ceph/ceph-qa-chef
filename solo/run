@@ -11,6 +11,16 @@ ubuntu=$(echo $distro | grep -ic -e ubuntu -e debian || true)
 debian=$(echo $distro | grep -ic debian || true)
 fedora=$(echo $distro | grep -ic fedora || true)
 
+
+gemmirror() {
+    for mirror in $(gem source | grep http || true)
+    do
+        gem source -r "$mirror"
+    done
+    gem source -a "http://apt-mirror.front.sepia.ceph.com/rubygems.org/"
+}
+
+
 if [ $ubuntu -gt 0 ]; then
     
     for package in ruby1.9.1 ruby1.9.1-dev build-essential; do
@@ -38,11 +48,17 @@ if [ $ubuntu -gt 0 ]; then
     CHEF_BIN="$CHEF_BIN_DIR/chef-solo"
     if [ $debian -gt 0 ]
     then
-        sudo sed -i 's/^\# en_US/en_US/g' /etc/locale.gen || true
-        sudo /usr/sbin/locale-gen en_US.UTF-8 || true
+        checklocale=$(locale -a | grep -ic en_us.utf8 || true)
+        if [ $checklocale -lt 1 ]
+        then
+                sudo sed -i 's/^\# en_US/en_US/g' /etc/locale.gen || true
+                sudo /usr/sbin/locale-gen en_US.UTF-8 || true
+        fi
         export LANG=en_US.UTF-8
         export LANGUAGE=en_US.UTF-8
         export LC_ALL=en_US.UTF-8
+
+	gemmirror
         sudo gem1.9.1 install --no-rdoc --no-ri mime-types -v "<2.0"
     fi
     if [ ! -e "$CHEF_BIN" ]; then
@@ -100,6 +116,7 @@ if [ $centos -gt 0 ]; then
     if [ ! -e "$CHEF_BIN" ]; then
         #Mime-types 2.0 requires ruby 1.9.2 which is not included on RHEL/centos.
         #Pre-install 1.25 so it doesn't attempt to grab 2.0 as a dependency.
+        gemmirror
         sudo gem install --no-rdoc --no-ri mime-types -v "<2.0"
         sudo gem install --no-rdoc --no-ri chef
     fi
