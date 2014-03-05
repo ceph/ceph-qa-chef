@@ -181,10 +181,15 @@ else
 end
 
 if node[:platform_version] >= "12.10"
-  package 'libboost-thread1.49.0'
+  if node[:platform_version] >= "13.10"
+    package 'libboost-thread1.54.0'
+  else
+    package 'libboost-thread1.49.0'
+  end
 else
   package 'libboost-thread1.46.1'
 end
+
 
 package 'cryptsetup-bin'
 package 'xfsprogs'
@@ -205,7 +210,7 @@ when "ubuntu"
   case node[:platform_version]
   when "10.10"
     package 'libcrypto++8'
-  when "11.10", "12.04", "12.10", "13.04", "13.10"
+  when "11.10", "12.04", "12.10", "13.04", "13.10", "14.04"
     package 'libcrypto++9'
   else
     Chef::Log.fatal("Unknown ubuntu release: #{node[:platform_version]}")

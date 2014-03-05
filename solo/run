@@ -4,13 +4,14 @@ set -e
 cd "$(dirname "$0")"
 
 distro=$(python -c 'import platform; distro = platform.dist()[0]; print distro.lower().rstrip()')
+distroversion=$(python -c 'import platform; distro = platform.dist()[1]; print distro')
 
 #Shell can't do string comparosin like bash so doing it awkwardly:
 centos=$(echo $distro | grep -ic -e centos -e redhat -e fedora || true)
 ubuntu=$(echo $distro | grep -ic -e ubuntu -e debian || true)
 debian=$(echo $distro | grep -ic debian || true)
 fedora=$(echo $distro | grep -ic fedora || true)
-
+trusty=$(echo $distroversion | grep -ic '14\.04' || true)
 
 gemmirror() {
     for mirror in $(gem source | grep http || true)
@@ -22,8 +23,15 @@ gemmirror() {
 
 
 if [ $ubuntu -gt 0 ]; then
-    
-    for package in ruby1.9.1 ruby1.9.1-dev build-essential; do
+    if [ $trusty -gt 0 ]
+    then
+        ruby='ruby1.9.1-full'
+        nodepends=''
+    else
+        ruby='ruby1.9.1 ruby1.9.1-dev'
+        nodepends='--no-install-recommends'
+    fi
+    for package in ${ruby} build-essential; do
         if [ "$(dpkg --status -- $package|sed -n 's/^Status: //p')" != "install ok installed" ]; then
             # add a space after old values
             missing="${missing:+$missing }$package"
@@ -35,11 +43,11 @@ if [ $ubuntu -gt 0 ]; then
         sudo \
 	    env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
 	    apt-get \
+        -y \
 	    -q \
 	    -o Dpkg::Options::=--force-confnew \
 	    install \
-	    --no-install-recommends \
-	    --assume-yes \
+	    $nodepends \
 	    -- \
 	    $missing
     fi
