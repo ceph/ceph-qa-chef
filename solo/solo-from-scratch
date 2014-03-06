@@ -10,12 +10,19 @@ set -e
 cd "$(dirname "$0")"
 
 distro=$(python -c 'import platform; distro = platform.dist()[0]; print distro.lower().rstrip()')
+distroversion=$(python -c 'import platform; distro = platform.dist()[1]; print distro')
 
 #Shell can't do string comparosin like bash so doing it awkwardly:
 centos=$(echo $distro | grep -ic -e centos -e redhat -e fedora || true)
 ubuntu=$(echo $distro | grep -ic -e ubuntu -e debian || true)
+trusty=$(echo $distroversion | grep -ic '14\.04' || true)
 
 if [ $ubuntu -gt 0 ]; then
+    if [ $trusty -gt 0 ]; then
+        nodepends=''
+    else
+        nodepends='--no-install-recommends'
+    fi
     for package in git; do
         if [ "$(dpkg --status -- $package|sed -n 's/^Status: //p')" != "install ok installed" ]; then
             # add a space after old values
@@ -34,15 +41,15 @@ if [ $ubuntu -gt 0 ]; then
         fi
         sudo apt-get update
         sudo \
-	    env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
-	    apt-get \
-	    -q \
+            env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
+            apt-get \
+            -y \
+            -q \
             -o Dpkg::Options::=--force-confnew \
             install \
-            --no-install-recommends \
-            --assume-yes \
-	    -- \
-	    $missing
+            $nodepends \
+            -- \
+            $missing
     fi
 fi
 
@@ -78,3 +85,4 @@ git init
 #Avoid pulling via HTTP to reduce apache load
 git pull git://ceph.com/ceph-qa-chef.git
 ./solo/run
+
