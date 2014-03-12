@@ -38,6 +38,12 @@ deb http://gitbuilder.ceph.com/apache2-deb-quantal-armv7l-basic/ref/master/ quan
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-quantal-armv7l-basic/ref/master/ quantal main
 EOH
     end
+  elsif node[:platform_version] == "14.04"
+    # pull from oneiric gitbuilder
+    content <<-EOH
+deb http://gitbuilder.ceph.com/apache2-deb-trusty-x86_64-basic/ref/master/ trusty main
+deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-trusty-x86_64-basic/ref/master/ trusty main
+EOH
   else
     # hrm!
   end

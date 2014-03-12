@@ -138,7 +138,7 @@ end
 
 # do radosgw recipe first, because it updates the apt sources and runs
 # apt-get update for us too.
-if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10" or node[:platform_version] == "12.04" or node[:platform_version] == "12.10")
+if node[:platform] == "ubuntu" and (node[:platform_version] == "10.10" or node[:platform_version] == "11.10" or node[:platform_version] == "12.04" or node[:platform_version] == "12.10" or node[:platform_version] == "14.04")
   include_recipe "ceph-qa::radosgw"
 else
   Chef::Log.info("radosgw not supported on: #{node[:platform]} #{node[:platform_version]}")
