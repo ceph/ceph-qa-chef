@@ -101,10 +101,12 @@ file '/etc/apt/sources.list.d/ceph-extras.list' do
   content tgt_content
 end
 
-execute "add gpg key" do
-  command "apt-key adv --keyserver keyserver.ubuntu.com --recv-key 7EBFDD5D17ED316D"
+execute "add release gpg key to apt" do
+  command <<-EOH
+  wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc' \
+  | sudo apt-key add -
+  EOH
 end
-
 
 # for s3-tests
 package 'python-pip'
