@@ -86,7 +86,7 @@ if [ $centos -gt 0 ]; then
         # EPEL Repo
         installed=$(sudo yum list installed | grep -ic epel-release- || true)
         if [ $installed -eq 0 ]; then
-            sudo yum -y install http://mirrors.tummy.com/pub/fedora.redhat.com/epel/6/x86_64/epel-release-6-8.noarch.rpm
+            sudo yum -y install http://apt-mirror.front.sepia.ceph.com/misc-rpms/epel-release-6-8.noarch.rpm
         fi
     fi
     if [ $fedora -gt 0 ]
