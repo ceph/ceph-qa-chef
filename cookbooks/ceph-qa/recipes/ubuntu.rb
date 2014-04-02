@@ -208,10 +208,6 @@ package 'parted'
 if node[:languages][:ruby][:host_cpu] != "arm"
   # for setting BIOS settings
   package 'smbios-utils'
-  package 'libleveldb1' do
-    options "--allow-unauthenticated"
-  end
-
 end
 
 case node[:platform]
