@@ -1,0 +1,18 @@
+[epel-testing]
+name=Extra Packages for Enterprise Linux 6 - Testing - $basearch
+baseurl=http://apt-mirror.front.sepia.ceph.com/epel6-testing/
+enabled=0
+gpgcheck=0
+
+[epel-testing-debuginfo]
+name=Extra Packages for Enterprise Linux 6 - Testing - $basearch - Debug
+baseurl=http://apt-mirror.front.sepia.ceph.com/epel6-testing-debuginfo/
+enabled=0
+gpgcheck=0
+
+[epel-testing-source]
+name=Extra Packages for Enterprise Linux 6 - Testing - $basearch - Source
+baseurl=http://apt-mirror.front.sepia.ceph.com/epel6-testing-source/
+enabled=0
+gpgcheck=0
+

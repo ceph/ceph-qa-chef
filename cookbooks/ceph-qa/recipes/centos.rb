@@ -1,3 +1,17 @@
+#Local Epel Mirror:
+cookbook_file '/etc/yum.repos.d/epel.repo' do
+  source "epel6.repo"
+  mode 0755
+  owner "root"
+  group "root"
+end
+cookbook_file '/etc/yum.repos.d/epel-testing.repo' do
+  source "epel6-testing.repo"
+  mode 0755
+  owner "root"
+  group "root"
+end
+
 #Local Repo
 file '/etc/yum.repos.d/qemu-ceph.repo' do
   owner 'root'
