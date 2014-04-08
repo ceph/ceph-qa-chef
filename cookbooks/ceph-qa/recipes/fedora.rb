@@ -24,7 +24,7 @@ if node[:platform_version] == "18"
     group 'root'
     mode '0644'
     content <<-EOH
-[feodra-apache-ceph]
+[fedora-apache-ceph]
 name=Fedora Local apache Repo
 baseurl=http://gitbuilder.ceph.com/apache2-rpm-fedora18-x86_64-basic/ref/master/
 gpgcheck=0
@@ -37,7 +37,7 @@ enabled=1
     group 'root'
     mode '0644'
     content <<-EOH
-[feodra-fcgi-ceph]
+[fedora-fcgi-ceph]
 name=Fedora Local fastcgi Repo
 baseurl=http://gitbuilder.ceph.com/mod_fastcgi-rpm-fedora18-x86_64-basic/ref/master/
 gpgcheck=0
@@ -52,7 +52,7 @@ if node[:platform_version] == "19"
     group 'root'
     mode '0644'
     content <<-EOH
-[feodra-apache-ceph]
+[fedora-apache-ceph]
 name=Fedora Local apache Repo
 baseurl=http://gitbuilder.ceph.com/apache2-rpm-fedora19-x86_64-basic/ref/master/
 gpgcheck=0
@@ -65,7 +65,7 @@ enabled=1
     group 'root'
     mode '0644'
     content <<-EOH
-[feodra-fcgi-ceph]
+[fedora-fcgi-ceph]
 name=Fedora Local fastcgi Repo
 baseurl=http://gitbuilder.ceph.com/mod_fastcgi-rpm-fedora19-x86_64-basic/ref/master/
 gpgcheck=0
