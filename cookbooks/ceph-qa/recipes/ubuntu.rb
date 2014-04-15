@@ -265,7 +265,11 @@ end
 package 'valgrind'
 package 'python-nose'
 package 'mpich2'
-package 'libmpich2-3'
+if node[:platform_version] <= "13.04"
+  package 'libmpich2-3'
+else
+  package 'mpich'
+end
 package 'libmpich2-dev'
 package 'ant'
 
