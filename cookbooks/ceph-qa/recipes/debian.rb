@@ -5,6 +5,13 @@ execute "add autobuild gpg key to apt" do
   EOH
 end
 
+execute "add autobuild gpg key to apt" do
+  command <<-EOH
+  wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc;hb=HEAD' \
+  | sudo apt-key add -
+  EOH
+end
+
 #Setup sources.list
 if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
   cookbook_file '/etc/apt/sources.list' do
@@ -26,6 +33,20 @@ Package: *
 Pin: origin gitbuilder.ceph.com
 Pin-Priority: 999
 EOH
+end
+
+#Ceph Extras:
+file '/etc/apt/sources.list.d/ceph-extras.list' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+
+  if node[:platform_version] >= "7.0" and node[:platform_version] < "8.0"
+    # pull from wheezy gitbuilder
+    content <<-EOH
+deb http://ceph.com/packages/ceph-extras/debian/ wheezy main
+EOH
+  end
 end
 
 #Rados GW:
@@ -80,7 +101,11 @@ if node[:platform_version] >= "7.0" and node[:platform_version] < "8.0"
   end
   #NFS servers uport per David Z.
   package 'nfs-kernel-server'
+  package 'libcurl3-gnutls' do
+    action :upgrade
+  end
 end
+
 if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
   package 'fuse-utils'
   package 'libfuse2'
