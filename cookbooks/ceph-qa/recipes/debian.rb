@@ -49,6 +49,20 @@ EOH
   end
 end
 
+#Ceph Dumpling:
+file '/etc/apt/sources.list.d/ceph-dumpling.list' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+
+  if node[:platform_version] >= "7.0" and node[:platform_version] < "8.0"
+    # pull from wheezy gitbuilder
+    content <<-EOH
+deb http://ceph.com/debian-dumpling/ wheezy main
+EOH
+  end
+end
+
 #Rados GW:
 file '/etc/apt/sources.list.d/radosgw.list' do
   owner 'root'
@@ -381,6 +395,12 @@ bash "ssh_max_sessions" do
     echo "MaxSessions 1000" >> sshd_config
   EOT
   not_if {File.read("/etc/ssh/sshd_config") =~ /MaxSessions/}
+end
+
+execute "Remove ceph dumpling file" do
+  command <<-'EOH'
+    rm -f /etc/apt/sources.list.d/ceph-dumpling.list
+  EOH
 end
 
 service "ssh" do
