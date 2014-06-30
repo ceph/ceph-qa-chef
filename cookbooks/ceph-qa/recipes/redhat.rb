@@ -104,6 +104,10 @@ execute "Clearing yum cache" do
   command "yum clean all"
 end
 
+execute "Clearing out previously installed verisons of ceph" do
+  command "yum remove -y ceph ceph-common libcephfs1 ceph-radosgw python-ceph librbd1 librados2|| true"
+end
+
 #So we can make our repo highest priority
 package 'yum-plugin-priorities'
 
