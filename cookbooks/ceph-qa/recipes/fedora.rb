@@ -1,3 +1,6 @@
+# Use our pip mirror
+include_recipe "ceph-qa::pip_mirror"
+
 #Network Management causing bind errors on monitors
 #Service method does not work right here either.
 

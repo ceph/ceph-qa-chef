@@ -1,3 +1,6 @@
+# Use our pip mirror
+include_recipe "ceph-qa::pip_mirror"
+
 #Local Epel Mirror:
 cookbook_file '/etc/yum.repos.d/epel.repo' do
   source "epel6.repo"

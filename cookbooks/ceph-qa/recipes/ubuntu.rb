@@ -1,3 +1,6 @@
+# Use our pip mirror
+include_recipe "ceph-qa::pip_mirror"
+
 #Fail if ubuntu != 1000 UID
 if node['etc']['passwd']['ubuntu']['uid'] != 1000
  raise "The ubuntu user should be UID of 1000. It is not. Re-image this machine."
