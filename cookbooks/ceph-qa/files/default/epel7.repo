@@ -1,0 +1,5 @@
+[epel]
+name=Extra Packages for Enterprise Linux 6 - $basearch
+baseurl=http://apt-mirror.front.sepia.ceph.com/epel7/
+enabled=1
+gpgcheck=0

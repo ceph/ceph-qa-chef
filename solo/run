@@ -81,14 +81,24 @@ if [ $ubuntu -gt 0 ]; then
 fi
 
 if [ $centos -gt 0 ]; then
+    version=$(lsb_release -r -s | cut -d'.' -f1)
     if [ $fedora -lt 1 ]
     then
-        # EPEL Repo
-        installed=$(sudo yum list installed | grep -ic epel-release- || true)
-        if [ $installed -eq 0 ]; then
-            sudo yum -y install http://apt-mirror.front.sepia.ceph.com/misc-rpms/epel-release-6-8.noarch.rpm
-            sudo sed -i 's;mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch;baseurl=http://apt-mirror.front.sepia.ceph.com/epel6/;g' /etc/yum.repos.d/epel.repo || true
-            sudo yum clean all
+        if [ $version -eq 7 ]
+        then
+            # EPEL Repo
+            installed=$(sudo yum list installed | grep -ic epel-release- || true)
+            if [ $installed -eq 0 ]; then
+                sudo yum -y install http://apt-mirror.front.sepia.ceph.com/misc-rpms/epel-release-7-0.2.noarch.rpm
+            fi
+        else
+            # EPEL Repo
+            installed=$(sudo yum list installed | grep -ic epel-release- || true)
+            if [ $installed -eq 0 ]; then
+                sudo yum -y install http://apt-mirror.front.sepia.ceph.com/misc-rpms/epel-release-6-8.noarch.rpm
+                sudo sed -i 's;mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch;baseurl=http://apt-mirror.front.sepia.ceph.com/epel6/;g' /etc/yum.repos.d/epel.repo || true
+                sudo yum clean all
+            fi
         fi
     fi
     if [ $fedora -gt 0 ]
@@ -121,6 +131,10 @@ if [ $centos -gt 0 ]; then
         CHEF_BIN="/usr/local/bin/chef-solo"
     else
         CHEF_BIN="/usr/bin/chef-solo"
+    fi
+    if [ $version -eq 7 ]
+    then
+        CHEF_BIN="/usr/local/bin/chef-solo"
     fi
 
     if [ ! -e "$CHEF_BIN" ]; then

@@ -20,11 +20,21 @@ if node[:platform] == "ubuntu"
 end
 
 if node[:platform] == "centos"
-  include_recipe "ceph-qa::centos"
+  if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
+    include_recipe "ceph-qa::centos6"
+  end
+  if node[:platform_version] >= "7.0" and node[:platform_version] < "8.0"
+    include_recipe "ceph-qa::centos7"
+  end
 end
 
 if node[:platform] == "redhat"
-  include_recipe "ceph-qa::redhat"
+  if node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
+    include_recipe "ceph-qa::redhat6"
+  end
+  if node[:platform_version] >= "7.0" and node[:platform_version] < "8.0"
+    include_recipe "ceph-qa::redhat7"
+  end
 end
 
 if node[:platform] == "debian"
