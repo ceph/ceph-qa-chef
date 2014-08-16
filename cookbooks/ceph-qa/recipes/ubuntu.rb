@@ -759,7 +759,13 @@ file '/etc/exports' do
 /tmp    1.1.1.1(ro,sync,no_subtree_check)
 EOH
 end
-
+if node[:platform_version] >= "14.04"
+  execute "Restarting NFS via service on Trusty and above" do
+    command <<-'EOH'
+      sudo service nfs-kernel-server restart
+    EOH
+  end
+end
 
 file '/ceph-qa-ready' do
   content "ok\n"
