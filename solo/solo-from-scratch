@@ -83,6 +83,6 @@ git init
 #git pull http://ceph.com/git/ceph-qa-chef.git
 
 #Avoid pulling via HTTP to reduce apache load
-git pull git://ceph.com/ceph-qa-chef.git
+git pull git://ceph.com/ceph-qa-chef.git foo
 ./solo/run
 
