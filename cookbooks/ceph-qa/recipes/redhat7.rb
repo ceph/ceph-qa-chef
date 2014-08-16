@@ -36,6 +36,34 @@ enabled=1
   EOH
 end
 
+file '/etc/yum.repos.d/apache-ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[rhel7-apache-ceph]
+name=RHEL 7 Local apache Repo
+baseurl=http://gitbuilder.ceph.com/apache2-rpm-rhel7-x86_64-basic/ref/master/
+gpgcheck=0
+enabled=1
+priority=2
+  EOH
+end
+
+file '/etc/yum.repos.d/fcgi-ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[rhel7-fcgi-ceph]
+name=RHEL 7 Local fastcgi Repo
+baseurl=http://gitbuilder.ceph.com/mod_fastcgi-rpm-rhel7-x86_64-basic/ref/master/
+gpgcheck=0
+enabled=1
+priority=2
+  EOH
+end
+
 
 execute "Clearing yum cache" do
   command "yum clean all"
@@ -109,6 +137,39 @@ package 'qemu-kvm'
 package 'qemu-kvm-tools'
 package 'qemu-guest-agent'
 package 'genisoimage'
+
+
+#Rados GW
+
+#Force downgrade of packages doesnt work on older chef, uninstall first.
+package 'httpd' do
+  action :remove
+end
+package 'http-devel' do
+  action :remove
+end
+package 'httpd-tools' do
+  action :remove
+end
+package 'mod_ssl' do
+  version '2.4.6-17_ceph.el7'
+end
+package 'httpd' do
+  version '2.4.6-17_ceph.el7'
+end
+package 'httpd-tools' do
+  version '2.4.6-17_ceph.el7'
+end
+package 'httpd-devel' do
+  version '2.4.6-17_ceph.el7'
+end
+package 'mod_fastcgi' do
+  version '2.4.7-1.ceph.el7'
+end
+service "httpd" do
+  action [ :disable, :stop ]
+end
+
 
 
 package 'python-pip'
