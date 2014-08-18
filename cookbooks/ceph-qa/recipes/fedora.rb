@@ -21,62 +21,64 @@ cookbook_file '/etc/default/grub' do
   group "root"
 end
 
-if node[:platform_version] == "18"
-  file '/etc/yum.repos.d/apache-ceph.repo' do
-    owner 'root'
-    group 'root'
-    mode '0644'
-    content <<-EOH
+
+
+file '/etc/yum.repos.d/apache-ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
 [fedora-apache-ceph]
 name=Fedora Local apache Repo
-baseurl=http://gitbuilder.ceph.com/apache2-rpm-fedora18-x86_64-basic/ref/master/
-gpgcheck=0
+baseurl=http://gitbuilder.ceph.com/apache2-rpm-fedora#{node.platform_version}-x86_64-basic/ref/master/
+priority=0
+pgcheck=0
 enabled=1
-    EOH
-  end
+  EOH
+end
   
-  file '/etc/yum.repos.d/fcgi-ceph.repo' do
-    owner 'root'
-    group 'root'
-    mode '0644'
-    content <<-EOH
+file '/etc/yum.repos.d/fcgi-ceph.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
 [fedora-fcgi-ceph]
 name=Fedora Local fastcgi Repo
-baseurl=http://gitbuilder.ceph.com/mod_fastcgi-rpm-fedora18-x86_64-basic/ref/master/
+baseurl=http://gitbuilder.ceph.com/mod_fastcgi-rpm-fedora#{node.platform_version}-x86_64-basic/ref/master/
+priority=0
 gpgcheck=0
 enabled=1
-    EOH
-  end
+  EOH
 end
 
-if node[:platform_version] == "19"
-  file '/etc/yum.repos.d/apache-ceph.repo' do
-    owner 'root'
-    group 'root'
-    mode '0644'
-    content <<-EOH
-[fedora-apache-ceph]
-name=Fedora Local apache Repo
-baseurl=http://gitbuilder.ceph.com/apache2-rpm-fedora19-x86_64-basic/ref/master/
+file '/etc/yum.repos.d/ceph-extras.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[ceph-extras]
+name=Fedora ceph extras
+baseurl=http://ceph.com/packages/ceph-extras/rpm/fedora#{node.platform_version}/x86_64/
+priority=0
 gpgcheck=0
 enabled=1
-    EOH
-  end
-
-  file '/etc/yum.repos.d/fcgi-ceph.repo' do
-    owner 'root'
-    group 'root'
-    mode '0644'
-    content <<-EOH
-[fedora-fcgi-ceph]
-name=Fedora Local fastcgi Repo
-baseurl=http://gitbuilder.ceph.com/mod_fastcgi-rpm-fedora19-x86_64-basic/ref/master/
-gpgcheck=0
-enabled=1
-    EOH
-  end
+  EOH
 end
 
+
+execute "Installing GPG keys" do
+  command <<-'EOH'
+rpm --import 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc'
+rpm --import 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc'
+  EOH
+end
+
+execute "Clearing yum cache" do
+  command "yum clean all"
+end
+
+#So we can make our repo highest priority
+package 'yum-plugin-priorities'
 
 package 'redhat-lsb'
 package 'sysstat'
@@ -191,6 +193,24 @@ if node[:platform_version] == "19"
   end
   package 'mod_fastcgi' do
     version '2.4.7-1.ceph.fc19'
+  end
+end
+
+if node[:platform_version] == "20"
+  package 'mod_ssl' do
+    version '2.4.6-17_ceph.fc20'
+  end
+  package 'httpd' do
+    version '2.4.6-17_ceph.fc20'
+  end
+  package 'httpd-tools' do
+    version '2.4.6-17_ceph.fc20'
+  end
+  package 'httpd-devel' do
+    version '2.4.6-17_ceph.fc20'
+  end
+  package 'mod_fastcgi' do
+    version '2.4.7-1.ceph.fc20'
   end
 end
 
