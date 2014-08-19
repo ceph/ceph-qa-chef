@@ -99,6 +99,35 @@ package 'fuse-libs'
 package 'python-virtualenv'
 
 
+#RGW tests
+directory '/home/ubuntu/.cpan/CPAN/' do
+  owner "ubuntu"
+  group "ubuntu"
+  mode "0755"
+  recursive true
+end
+cookbook_file '/home/ubuntu/.cpan/CPAN/MyConfig.pm' do
+  source "CPANConfig.pm"
+  mode 0755
+  owner "ubuntu"
+  group "ubuntu"
+end
+directory '/root/.cpan/CPAN/' do
+  owner "root"
+  group "root"
+  mode "0755"
+  recursive true
+end
+cookbook_file '/root/.cpan/CPAN/MyConfig.pm' do
+  source "CPANConfig.pm"
+  mode 0755
+  owner "root"
+  group "root"
+end
+execute "Installing CPAN Amazon::S3" do
+  command "cpan  Amazon::S3"
+end
+
 package 'openssl'
 package 'libuuid'
 package 'btrfs-progs'
