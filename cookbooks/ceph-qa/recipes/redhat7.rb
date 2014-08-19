@@ -16,7 +16,7 @@ file '/etc/yum.repos.d/rhel7.repo' do
   group 'root'
   mode '0644'
   content <<-EOH
-[rhel-6-repo]
+[rhel-7-repo]
 name=My Red Hat Enterprise Linux $releasever - $basearch
 baseurl=http://apt-mirror.front.sepia.ceph.com/rhel7repo/server
 gpgcheck=0
@@ -28,7 +28,7 @@ file '/etc/yum.repos.d/rhel7-optional.repo' do
   group 'root'
   mode '0644'
   content <<-EOH
-[rhel-6-repo]
+[rhel-7-repo]
 name=My Red Hat Enterprise Linux $releasever - $basearch
 baseurl=http://apt-mirror.front.sepia.ceph.com/rhel7repo/server-optional
 gpgcheck=0
@@ -67,6 +67,14 @@ end
 
 execute "Clearing yum cache" do
   command "yum clean all"
+end
+
+execute "Fix hostname" do
+  command <<-'EOH'
+hostname=`hostname | cut -d'.' -f1`
+hostname $hostname
+echo $hostname > /etc/hostname
+  EOH
 end
 
 execute "Clearing out previously installed verisons of ceph" do
