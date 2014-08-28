@@ -1,5 +1,6 @@
 # Use our pip mirror
 include_recipe "ceph-qa::pip_mirror"
+include_recipe "ceph-qa::brokencloud"
 
 #Local Epel Mirror:
 cookbook_file '/etc/yum.repos.d/epel.repo' do
