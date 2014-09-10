@@ -66,7 +66,7 @@ if [ $ubuntu -gt 0 ]; then
         export LANGUAGE=en_US.UTF-8
         export LC_ALL=en_US.UTF-8
 
-	#gemmirror
+        gemmirror
         sudo gem1.9.1 install --no-rdoc --no-ri mime-types -v "<2.0"
     fi
     if [ ! -e "$CHEF_BIN" ]; then
@@ -140,7 +140,7 @@ if [ $centos -gt 0 ]; then
     if [ ! -e "$CHEF_BIN" ]; then
         #Mime-types 2.0 requires ruby 1.9.2 which is not included on RHEL/centos.
         #Pre-install 1.25 so it doesn't attempt to grab 2.0 as a dependency.
-        #gemmirror
+        gemmirror
         sudo gem install --no-rdoc --no-ri mime-types -v "<2.0"
         sudo gem install --no-rdoc --no-ri chef
     fi
