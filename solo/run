@@ -54,6 +54,8 @@ if [ $ubuntu -gt 0 ]; then
 
     CHEF_BIN_DIR="${HOME}/.gem/ruby/1.9.1/bin"
     CHEF_BIN="$CHEF_BIN_DIR/chef-solo"
+    gemmirror
+
     if [ $debian -gt 0 ]
     then
         checklocale=$(locale -a | grep -ic en_us.utf8 || true)
@@ -66,7 +68,6 @@ if [ $ubuntu -gt 0 ]; then
         export LANGUAGE=en_US.UTF-8
         export LC_ALL=en_US.UTF-8
 
-        gemmirror
         sudo gem1.9.1 install --no-rdoc --no-ri mime-types -v "<2.0"
     fi
     if [ ! -e "$CHEF_BIN" ]; then
