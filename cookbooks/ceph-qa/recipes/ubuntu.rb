@@ -10,7 +10,15 @@ end
 # remove ceph packages (if any)
 #  FIXME: possibly remove this when teuthology starts using debs.
 execute "remove ceph packages" do
-  command 'apt-get purge -f -y --force-yes ceph ceph-common libcephfs1 radosgw python-ceph librbd1 librados2|| true'
+  command <<-EOH
+  apt-get purge -f -y --force-yes ceph || true
+  apt-get purge -f -y --force-yes ceph-common || true
+  apt-get purge -f -y --force-yes libcephfs1 || true
+  apt-get purge -f -y --force-yes radosgw || true
+  apt-get purge -f -y --force-yes python-ceph || true
+  apt-get purge -f -y --force-yes librbd1 || true
+  apt-get purge -f -y --force-yes librados2 || true
+  EOH
 end
 execute "remove /etc/ceph" do
   command 'rm -rf /etc/ceph'
