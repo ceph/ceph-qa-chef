@@ -28,9 +28,22 @@ file '/etc/yum.repos.d/rhel7-optional.repo' do
   group 'root'
   mode '0644'
   content <<-EOH
-[rhel-7-repo]
+[rhel-7-optional]
 name=My Red Hat Enterprise Linux $releasever - $basearch
 baseurl=http://apt-mirror.front.sepia.ceph.com/rhel7repo/server-optional
+gpgcheck=0
+enabled=1
+  EOH
+end
+
+file '/etc/yum.repos.d/rhel7-extras.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[rhel-7-extras]
+name=My Red Hat Enterprise Linux $releasever - $basearch
+baseurl=http://apt-mirror.front.sepia.ceph.com/rhel7repo/extras
 gpgcheck=0
 enabled=1
   EOH
