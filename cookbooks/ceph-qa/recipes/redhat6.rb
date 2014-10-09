@@ -22,9 +22,23 @@ file '/etc/yum.repos.d/rhel6.repo' do
   group 'root'
   mode '0644'
   content <<-EOH
-[rhel-6-repo]
-name=My Red Hat Enterprise Linux $releasever - $basearch
-baseurl=http://apt-mirror.front.sepia.ceph.com/rhel6repo/
+[rhel6-server]
+name=My Red Hat Enterprise Linux Server $releasever - $basearch
+baseurl=http://apt-mirror.front.sepia.ceph.com/rhel6repo-server/
+gpgcheck=0
+enabled=1
+  EOH
+end
+
+#Local Repo Mirror
+file '/etc/yum.repos.d/rhel6-server-optional.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[rhel6-server-optional]
+name=My Red Hat Enterprise Linux Optional $releasever - $basearch
+baseurl=http://apt-mirror.front.sepia.ceph.com/rhel6repo-server-optional
 gpgcheck=0
 enabled=1
   EOH
