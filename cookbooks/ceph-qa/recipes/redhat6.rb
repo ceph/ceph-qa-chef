@@ -97,7 +97,7 @@ file '/etc/yum.repos.d/ceph.repo' do
   content <<-EOH
 [centos6-ceph]
 name=Cent OS 6 Local ceph Repo
-baseurl=http://gitbuilder.ceph.com/ceph-rpm-centos6-x86_64-basic/ref/cuttlefish/x86_64/
+baseurl=http://ceph.com/rpm-cuttlefish/rhel6/x86_64/
 gpgcheck=0
 enabled=1
 priority=2
@@ -190,8 +190,12 @@ end
 package 'ceph-libs' do
   action :remove
 end
-package 'librados2'
-package 'librbd1'
+package 'librados2' do
+  version '0.61.9-0.el6'
+end
+package 'librbd1' do
+  version '0.61.9-0.el6'
+end
 package 'qemu-img' do
   version '0.12.1.2-2.415.el6.3ceph'
 end
