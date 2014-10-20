@@ -81,7 +81,7 @@ file '/etc/yum.repos.d/ceph.repo' do
   content <<-EOH
 [centos6-ceph]
 name=Cent OS 6 Local ceph Repo
-baseurl=http://gitbuilder.ceph.com/ceph-rpm-centos6-x86_64-basic/ref/cuttlefish/x86_64/
+baseurl=http://ceph.com/rpm-cuttlefish/el6/x86_64/
 gpgcheck=0
 enabled=1
 priority=2
