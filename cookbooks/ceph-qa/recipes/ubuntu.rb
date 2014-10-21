@@ -615,7 +615,7 @@ if !node['hostname'].match(/^(vpm)/)
       miracheck=$(uname -n | grep -ic mira)
       armcheck=$(uname -m | grep -ic arm)
       netmask=$(ipcalc $cidr | grep -i netmask | awk '{print $2}')
-      gateway=$(ipcalc $cidr | grep -i hostmin | awk '{print $2}')
+      gateway=$(route -n | grep ^0.0 | awk '{print $2}')
       broadcast=$(ipcalc $cidr | grep -i hostmax | awk '{print $2}')
       octet1=$(echo $ip | cut -d'.' -f1)
       octet2=$(echo $ip | cut -d'.' -f2)
@@ -672,6 +672,19 @@ file '/etc/resolvconf/resolv.conf.d/base' do
     search front.sepia.ceph.com sepia.ceph.com
   EOH
 end
+
+if node['hostname'].match(/^(magna)/)
+  file '/etc/resolvconf/resolv.conf.d/base' do
+    owner 'root'
+    group 'root'
+    mode '0755'
+    content <<-EOH
+      nameserver 10.2.128.1
+      search front.sepia.ceph.com sepia.ceph.com
+    EOH
+  end
+end
+
 
 #Nagios sudo (for raid utilities)
 file '/etc/sudoers.d/90-nagios' do
