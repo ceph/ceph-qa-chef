@@ -679,7 +679,7 @@ if node['hostname'].match(/^(magna)/)
     group 'root'
     mode '0755'
     content <<-EOH
-      nameserver 10.2.128.1
+      nameserver 10.8.128.1
       search front.sepia.ceph.com sepia.ceph.com
     EOH
   end
