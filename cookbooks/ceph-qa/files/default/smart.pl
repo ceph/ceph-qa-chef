@@ -118,8 +118,8 @@ sub smartctl
 	}
 }
 
-#1068 IT controller
-if ( $scsi =~ /SAS1068E/i )
+#1068 IT controller OR Intel SAS.
+if ( $scsi =~ /SAS1068E/i || $scsi =~ /Patsburg/i )
 {
 	open(BLOCK,"cat /proc/partitions | grep -w sd[a-z] |");
 	while (<BLOCK>)
