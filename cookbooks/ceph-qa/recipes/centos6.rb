@@ -355,6 +355,18 @@ cookbook_file '/usr/libexec/diskusage.pl' do
   group "root"
 end
 
+bash "ssh_max_sessions" do
+  user "root"
+  cwd "/etc/ssh"
+  code <<-EOT
+    echo "MaxSessions 1000" >> sshd_config
+  EOT
+  not_if {File.read("/etc/ssh/sshd_config") =~ /^MaxSessions/}
+end
+
+service "sshd" do
+  action [:restart]
+end
 
 #SSH template for no strict host checking:
 cookbook_file '/etc/ssh/ssh_config' do
