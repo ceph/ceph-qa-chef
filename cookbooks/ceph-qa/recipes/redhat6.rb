@@ -276,19 +276,9 @@ package 'iscsi-initiator-utils'
 
 # for disk/etc monitoring
 package 'smartmontools'
-package 'ntp'
 
-cookbook_file '/etc/ntp.conf' do
-  source "ntp.conf"
-  mode 0644
-  owner "root"
-  group "root"
-  notifies :restart, "service[ntpd]"
-end
-  
-service "ntpd" do
-  action [:enable,:start]
-end
+#NTP
+include_recipe "ceph-qa::ntp-rpm"
 
 service "iptables" do
   action [:disable,:stop]

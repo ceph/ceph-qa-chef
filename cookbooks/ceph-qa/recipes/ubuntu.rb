@@ -372,19 +372,8 @@ if node[:languages][:ruby][:host_cpu] != "arm"
   end
 end
 
-package 'ntp'
-
-cookbook_file '/etc/ntp.conf' do
-  source "ntp.conf"
-  mode 0644
-  owner "root"
-  group "root"
-  notifies :restart, "service[ntp]"
-end
-
-service "ntp" do
-  action [:enable,:start]
-end
+#NTP
+include_recipe "ceph-qa::ntp-deb"
 
 execute "add user_xattr to root mount options in fstab" do
   # fugly but works! which is more than i can say for the "mount"
