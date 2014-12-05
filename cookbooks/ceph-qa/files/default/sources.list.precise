@@ -1,7 +1,7 @@
 # deb http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com/ubuntu/ precise main restricted
 
 # deb http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com/ubuntu/ precise-updates main restricted
-# deb http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com/ubuntu precise-security main restricted
+# deb http://security.ubuntu.com/ubuntu precise-security main restricted
 
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
@@ -39,12 +39,12 @@ deb-src http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com/ubuntu/ precis
 deb http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com/ubuntu/ precise-backports main restricted universe multiverse
 deb-src http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com/ubuntu/ precise-backports main restricted universe multiverse
 
-deb http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com/ubuntu precise-security main restricted
-deb-src http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com/ubuntu precise-security main restricted
-deb http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com/ubuntu precise-security universe
-deb-src http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com/ubuntu precise-security universe
-deb http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com/ubuntu precise-security multiverse
-deb-src http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com/ubuntu precise-security multiverse
+deb http://security.ubuntu.com/ubuntu precise-security main restricted
+deb-src http://security.ubuntu.com/ubuntu precise-security main restricted
+deb http://security.ubuntu.com/ubuntu precise-security universe
+deb-src http://security.ubuntu.com/ubuntu precise-security universe
+deb http://security.ubuntu.com/ubuntu precise-security multiverse
+deb-src http://security.ubuntu.com/ubuntu precise-security multiverse
 
 ## Uncomment the following two lines to add software from Canonical's
 ## 'partner' repository.
