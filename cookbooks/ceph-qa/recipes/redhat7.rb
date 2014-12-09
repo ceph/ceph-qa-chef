@@ -164,6 +164,7 @@ package 'ant'
 #package 'bonnie++'
 #package 'tiobench'
 package 'fuse-sshfs'
+package 'lsof'
 #package 'fsstress'
 
 # used by the xfstests tasks
