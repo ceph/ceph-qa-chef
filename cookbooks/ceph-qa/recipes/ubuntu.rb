@@ -119,16 +119,6 @@ execute "add release gpg key to apt" do
   EOH
 end
 
-# for s3-tests
-package 'python-pip'
-package 'python-virtualenv'
-package 'python-dev'
-package 'libevent-dev'
-
-#CPAN
-package 'perl'
-package 'libwww-perl'
-
 directory '/home/ubuntu/.cpan/CPAN/' do
   owner "ubuntu"
   group "ubuntu"
@@ -183,6 +173,17 @@ if node[:languages][:ruby][:host_cpu] == "arm"
     package 'linux-tools-3.5.0-1000'
   end
 end
+
+
+# for s3-tests
+package 'python-pip'
+package 'python-virtualenv'
+package 'python-dev'
+package 'libevent-dev'
+
+#CPAN
+package 'perl'
+package 'libwww-perl'
 
 package 'lsb-release'
 package 'build-essential'
