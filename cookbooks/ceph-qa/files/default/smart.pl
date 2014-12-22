@@ -70,7 +70,7 @@ sub smartctl
 			$crit = 1;
 			push(@out,$message);
 		}
-	        if (( $_ =~ /_sector/i ) || ( $_ =~ /_uncorrect/i ))
+	        if (( $_ =~ /_sector/i ) || ( $_ =~ /d_uncorrect/i ))
 	        {
 	                my @sector = split;
 	                if ( $sector[1] =~ /reallocated/i  )
