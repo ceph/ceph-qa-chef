@@ -256,19 +256,6 @@ package 'attr'
 package 'dbench'
 package 'bonnie++'
 package 'iozone3'
-if node[:platform_version] <= "13.04"
-  package 'tiobench'
-else
-  cookbook_file '/tmp/tiobench.deb' do
-    source "tiobench_0.3.3-5ubuntu1_amd64.deb"
-    mode 0644
-    owner "root"
-    group "root"
-  end
-  execute "Installing tiobench" do
-    command "dpkg -i /tmp/tiobench.deb; rm -vf /tmp/tiobench.deb"
-  end
-end
 
 # No ltp-kernel-test package on quantal
 if node[:platform_version] < "12.10"

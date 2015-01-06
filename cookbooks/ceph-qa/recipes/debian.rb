@@ -171,7 +171,6 @@ package 'git-core'
 package 'attr'
 package 'dbench'
 package 'bonnie++'
-package 'tiobench'
 
 package 'valgrind'
 package 'python-nose'
