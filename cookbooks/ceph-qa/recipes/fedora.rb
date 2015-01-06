@@ -125,7 +125,6 @@ package 'mpich2-devel'
 package 'ant'
 package 'dbench'
 package 'bonnie++'
-package 'tiobench'
   
 # used by the xfstests tasks
 package 'libtool'
