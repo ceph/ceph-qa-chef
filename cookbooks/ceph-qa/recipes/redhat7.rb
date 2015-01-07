@@ -91,7 +91,7 @@ echo $hostname > /etc/hostname
 end
 
 execute "Clearing out previously installed verisons of ceph" do
-  command "yum remove -y ceph ceph-common ceph-debuginfo libcephfs1 ceph-radosgw python-ceph librbd1 librados2|| true"
+  command "for package in ceph ceph-common ceph-debuginfo ceph-release libcephfs1 ceph-radosgw python-ceph librbd1 librados2; do yum remove -y $package|| true; done"
 end
 
 #So we can make our repo highest priority
