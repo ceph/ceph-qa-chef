@@ -123,7 +123,7 @@ execute "Clearing yum cache" do
 end
 
 execute "Clearing out previously installed verisons of ceph" do
-  command "yum remove -y ceph ceph-common libcephfs1 ceph-radosgw python-ceph librbd1 librados2|| true"
+  command "yum remove -y ceph ceph-common ceph-debuginfo libcephfs1 ceph-radosgw python-ceph librbd1 librados2|| true"
 end
 
 #So we can make our repo highest priority
