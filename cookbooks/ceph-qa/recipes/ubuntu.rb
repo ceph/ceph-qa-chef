@@ -473,12 +473,18 @@ if node[:languages][:ruby][:host_cpu] != "arm"
       f=/etc/default/grub
       #Mira are ttyS2
       miracheck=$(uname -n | grep -ic mira || true)
+      typicacheck=$(uname -n | grep -ic typica || true)
       # if it has a setting, make sure it's to ttyS1
       if [ $miracheck -gt 0 ]
       then
       if grep -q '^GRUB_CMDLINE_LINUX=.*".*console=tty0 console=ttyS[012],115200' $f; then sed 's/console=ttyS[012]/console=ttyS2/' <$f >$f.chef; fi
       else
+      if [ $typicacheck -gt 0 ]
+      then
+      if grep -q '^GRUB_CMDLINE_LINUX=.*".*console=tty0 console=ttyS[012],115200' $f; then sed 's/console=ttyS[012]/console=ttyS0/' <$f >$f.chef; fi
+      else
       if grep -q '^GRUB_CMDLINE_LINUX=.*".*console=tty0 console=ttyS[01],115200' $f; then sed 's/console=ttyS[01]/console=ttyS1/' <$f >$f.chef; fi
+      fi
       fi
 
       # if it has no setting, add it
@@ -486,7 +492,12 @@ if node[:languages][:ruby][:host_cpu] != "arm"
       then
       if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[012],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS2,115200"/' <$f >$f.chef; fi
       else
+      if [ $typicacheck -gt 0 ]
+      then
+      if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[012],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS0,115200"/' <$f >$f.chef; fi
+      else
       if ! grep -q '^GRUB_CMDLINE_LINUX=.*".* console=tty0 console=ttyS[01],115200.*' $f; then sed 's/^GRUB_CMDLINE_LINUX="\(.*\)"$/GRUB_CMDLINE_LINUX="\1 console=tty0 console=ttyS1,115200"/' <$f >$f.chef; fi
+      fi
       fi
 
 
@@ -504,9 +515,16 @@ if node[:languages][:ruby][:host_cpu] != "arm"
       echo "GRUB_TERMINAL=serial" >> $f
       echo "GRUB_SERIAL_COMMAND=\"serial --unit=2 --speed=115200 --stop=1\"" >> $f
       else
+      if [ $typicacheck -gt 0 ]
+      then
+      echo "" >> $f
+      echo "GRUB_TERMINAL=serial" >> $f
+      echo "GRUB_SERIAL_COMMAND=\"serial --unit=0 --speed=115200 --stop=1\"" >> $f
+      else
       echo "" >> $f
       echo "GRUB_TERMINAL=serial" >> $f
       echo "GRUB_SERIAL_COMMAND=\"serial --unit=1 --speed=115200 --stop=1\"" >> $f
+      fi
       fi
       fi
 
@@ -616,6 +634,21 @@ if !node['hostname'].match(/^(vpm)/)
       \n\
       /g" /etc/network/interfaces
       else
+      typicacheck=$(uname -n | grep -ic typica)
+      if [ $typicacheck -gt 0 ]
+      then
+      sed -i "s/iface eth0 inet dhcp/\
+      iface eth0 inet static\n\
+            address $ip\n\
+            netmask $netmask\n\
+            gateway $gateway\n\
+            broadcast $broadcast\n\
+            up route add -net 10.99.118.0\/24 gw 172.20.133.1 dev eth0\n\
+            up route add -net 10.214.128.0\/20 gw 172.20.133.1 dev eth0\n\
+            up route add -net 10.214.0.0\/20 gw 172.20.133.1 dev eth0\n\
+      \n\
+      /g" /etc/network/interfaces
+      else
       sed -i "s/iface eth0 inet dhcp/\
       iface eth0 inet static\n\
             address $ip\n\
@@ -628,6 +661,7 @@ if !node['hostname'].match(/^(vpm)/)
             address $octet1.$octet2.$octet3.$octet4\n\
             netmask $netmask\
       /g" /etc/network/interfaces
+      fi
       fi
       fi
     EOH
@@ -659,6 +693,19 @@ if node['hostname'].match(/^(magna)/)
       nameserver 10.8.135.251 
       nameserver 10.8.135.252
       search ceph.redhat.com front.sepia.ceph.com sepia.ceph.com
+    EOH
+  end
+end
+
+if node['hostname'].match(/^(typica)/)
+  file '/etc/resolvconf/resolv.conf.d/base' do
+    owner 'root'
+    group 'root'
+    mode '0755'
+    content <<-EOH
+      nameserver 172.20.132.1
+      nameserver 172.20.132.2
+      search front.sepia.ceph.com sepia.ceph.com
     EOH
   end
 end
