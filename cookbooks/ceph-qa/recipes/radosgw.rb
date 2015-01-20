@@ -9,6 +9,9 @@ file '/etc/apt/preferences.d/ceph.pref' do
 Package: *
 Pin: origin gitbuilder.ceph.com
 Pin-Priority: 999
+Package: *
+Pin: origin gitbuilder.ceph.redhat.com
+Pin-Priority: 999
 EOH
 end
 
