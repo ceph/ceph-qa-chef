@@ -77,6 +77,20 @@ priority=2
   EOH
 end
 
+#Lab extras
+file '/etc/yum.repos.d/lab-extras.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[lab-extras]
+name=lab-extras
+baseurl=http://apt-mirror.front.sepia.ceph.com/lab-extras/rhel7/
+gpgcheck=0
+enabled=1
+priority=2
+  EOH
+end
 
 execute "Clearing yum cache" do
   command "yum clean all"
@@ -166,6 +180,7 @@ package 'dbench'
 package 'fuse-sshfs'
 package 'lsof'
 #package 'fsstress'
+package 'iozone'
 
 # used by the xfstests tasks
 package 'libtool'
@@ -183,12 +198,26 @@ package 'python-matplotlib'
   
 # for qemu:
 package 'usbredir'
-package 'qemu-img'
-package 'qemu-kvm'
-package 'qemu-kvm-tools'
-package 'qemu-guest-agent'
 package 'genisoimage'
+package 'qemu-img' do
+  action :remove
+end
+package 'qemu-kvm' do
+  action :remove
+end
+package 'qemu-kvm-tools' do
+  action :remove
+end
 
+package 'qemu-img-rhev' do
+  version '1.5.3-60_ceph.el7.5'
+end
+package 'qemu-kvm-rhev' do
+  version '1.5.3-60_ceph.el7.5'
+end
+package 'qemu-kvm-tools-rhev' do
+  version '1.5.3-60_ceph.el7.5'
+end
 
 #Rados GW
 

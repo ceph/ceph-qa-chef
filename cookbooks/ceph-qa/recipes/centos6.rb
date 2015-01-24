@@ -103,6 +103,22 @@ protect=0
   EOH2
 end
 
+#Lab extras
+file '/etc/yum.repos.d/lab-extras.repo' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+[lab-extras]
+name=lab-extras
+baseurl=http://apt-mirror.front.sepia.ceph.com/lab-extras/centos6/
+gpgcheck=0
+enabled=1
+priority=2
+  EOH
+end
+
+
 execute "Clearing yum cache" do
   command "yum clean all"
 end
@@ -156,6 +172,7 @@ package 'bonnie++'
 package 'fuse-sshfs'
 package 'iozone'
 package 'fsstress'
+package 'iozone'
 
 # used by the xfstests tasks
 package 'libtool'
