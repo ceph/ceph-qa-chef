@@ -5,18 +5,22 @@ cookbook_file '/etc/ntp.conf' do
   mode 0644
   owner "root"
   group "root"
-  notifies :restart, "service[ntpd]"
+end
+
+# Stop NTP service and then manually run ntpd to immediatley update time
+service "ntpd" do
+  action [:enable,:stop]
 end
 
 if node['hostname'].match(/^(magna)/)
   execute "Getting around redhat blocking of NTP" do
     command <<-'EOH'
-      sudo sed -i 's/clock3.dreamhost.com/clock.corp.redhat.com/g' /etc/ntp.conf || true
+      sudo sed -i 's;^server [A-Z:a-z:.:-:0-9]*;server clock.corp.redhat.com;g' /etc/ntp.conf || true
+      sudo ntpd -gq
     EOH
   end
 end
 
 service "ntpd" do
-  action [:enable,:start]
+  action [:start]
 end
-
