@@ -16,7 +16,9 @@ if node['hostname'].match(/^(magna)/)
   execute "Getting around redhat blocking of NTP" do
     command <<-'EOH'
       sudo sed -i 's;^server [A-Z:a-z:.:-:0-9]*;server clock.corp.redhat.com;g' /etc/ntp.conf || true
-      sudo ntpd -gq
+      sleep 1
+      sudo ntpd -gq || true
+      sleep 1
     EOH
   end
 end
