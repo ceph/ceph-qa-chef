@@ -14,6 +14,9 @@ file '/etc/security/limits.d/ubuntu.conf' do
   EOH
 end
 
+if node['hostname'].match(/^(magna)/)
+  include_recipe "ceph-qa::octo"
+end
 
 if node[:platform] == "ubuntu"
   include_recipe "ceph-qa::ubuntu"
