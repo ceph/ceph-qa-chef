@@ -39,7 +39,11 @@ if [ $ubuntu -gt 0 ]; then
     done
     if [ -n "$missing" ]; then
         echo "$0: installing missing required packages: $missing" 1>&2
-        sudo apt-get update
+        aptcheck=$(find /var/cache/apt/pkgcache.bin -mmin -5 | wc -c || true)
+        if [ $aptcheck -lt 10 ]
+        then
+            sudo apt-get update || sudo apt-get update || true
+        fi
         sudo \
 	    env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
 	    apt-get \

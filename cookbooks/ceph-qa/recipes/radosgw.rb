@@ -62,7 +62,9 @@ end
 # TODO do this only once, after all sources.list manipulation is done,
 # but before first package directive (that uses non-default sources)
 execute 'apt-get update' do
-  command 'apt-get update'
+  command <<-'EOH'
+    apt-get update || apt-get update || true
+  EOH
 end
 
 package 'apache2' do

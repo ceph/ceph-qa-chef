@@ -89,10 +89,15 @@ EOH
   end
 end
 
-execute "apt-get update" do
-  command "apt-get update"
+execute 'apt-get update' do
+  command <<-'EOH'
+    apt-get update || apt-get update || true
+  EOH
 end
 
+package 'apt' do
+  action :upgrade
+end
 
 package 'lsb-release'
 package 'build-essential'

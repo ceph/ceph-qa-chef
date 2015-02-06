@@ -39,7 +39,7 @@ if [ $ubuntu -gt 0 ]; then
             sudo sed -i 's@http://archive.ubuntu.com@http://apt-mirror.front.sepia.ceph.com/archive.ubuntu.com@g' /etc/apt/sources.list
             sudo sed -i 's@http://security.ubuntu.com@http://apt-mirror.front.sepia.ceph.com/security.ubuntu.com@g' /etc/apt/sources.list
         fi
-        sudo apt-get update
+        sudo apt-get update || sudo apt-get update || true
         sudo \
             env DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical \
             apt-get \

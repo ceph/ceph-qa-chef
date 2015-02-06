@@ -154,8 +154,10 @@ else
   Chef::Log.info("radosgw not supported on: #{node[:platform]} #{node[:platform_version]}")
 
   # der.. well, run update.
-  execute "apt-get update" do
-    command "apt-get update"
+  execute 'apt-get update' do
+    command <<-'EOH'
+      apt-get update || apt-get update || true
+    EOH
   end
 end
 
@@ -172,6 +174,10 @@ if node[:languages][:ruby][:host_cpu] == "arm"
     package 'linux-tools-common'
     package 'linux-tools-3.5.0-1000'
   end
+end
+
+package 'apt' do
+  action :upgrade
 end
 
 
