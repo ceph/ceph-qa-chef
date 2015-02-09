@@ -32,26 +32,22 @@ file '/etc/apt/sources.list.d/radosgw.list' do
     # pull from precise gitbuilder
     content <<-EOH
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-precise-x86_64-basic/ref/master/ precise main
-deb http://gitbuilder.ceph.com/apache2-deb-precise-x86_64-basic/ref/master/ precise main
 EOH
   elsif node[:platform_version] == "11.10"
     # pull from oneiric gitbuilder
     content <<-EOH
-deb http://gitbuilder.ceph.com/apache2-deb-oneiric-x86_64-basic/ref/master/ oneiric main
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-oneiric-x86_64-basic/ref/master/ oneiric main
 EOH
   elsif node[:platform_version] == "12.10"
     if node[:languages][:ruby][:host_cpu] == "arm"
       # pull from arm repo
       content <<-EOH
-deb http://gitbuilder.ceph.com/apache2-deb-quantal-armv7l-basic/ref/master/ quantal main
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-quantal-armv7l-basic/ref/master/ quantal main
 EOH
     end
   elsif node[:platform_version] == "14.04"
     # pull from oneiric gitbuilder
     content <<-EOH
-deb http://gitbuilder.ceph.com/apache2-deb-trusty-x86_64-basic/ref/master/ trusty main
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-trusty-x86_64-basic/ref/master/ trusty main
 EOH
   else
