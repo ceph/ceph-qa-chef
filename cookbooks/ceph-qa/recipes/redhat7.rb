@@ -377,6 +377,32 @@ end
 #NFS servers uport per David Z.
 package 'nfs-utils'
 
+
+# include a dummy nfs export so that the nfs kernel server starts
+file '/etc/exports' do
+ owner 'root'
+  group 'root'
+  mode '0644'
+  content <<-EOH
+# /etc/exports: the access control list for filesystems which may be exported
+#               to NFS clients.  See exports(5).
+#
+# Example for NFSv2 and NFSv3:
+# /srv/homes       hostname1(rw,sync,no_subtree_check) hostname2(ro,sync,no_subtree_check)
+#
+# Example for NFSv4:
+# /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
+# /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
+#
+# dummy export just to make nfs_kernel_start
+/tmp    1.1.1.1(ro,sync,no_subtree_check)
+EOH
+end
+
+service "nfs-server" do
+  action [ :enable, :start ]
+end
+
 # Remove requiretty, not visiblepw and set unlimited security/limits.conf soft core value
 execute "Sudoers and security/lmits.conf changes" do
   command <<-'EOH'
