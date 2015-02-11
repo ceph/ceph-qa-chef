@@ -11,29 +11,57 @@ end
 
 
 #Local Repo Mirror
-file '/etc/yum.repos.d/rhel7.repo' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  content <<-EOH
+
+if node[:platform_version] == "7.1"
+  file '/etc/yum.repos.d/rhel7.repo' do
+    owner 'root'
+    group 'root'
+    mode '0644'
+    content <<-EOH
+[rhel-7.1-beta-repo]
+name=My Red Hat Enterprise Linux $releasever - $basearch
+baseurl=http://apt-mirror.front.sepia.ceph.com/rhel7.1-beta-repo/server/
+gpgcheck=0
+enabled=1
+    EOH
+  end
+  file '/etc/yum.repos.d/rhel7-optional.repo' do
+    owner 'root'
+    group 'root'
+    mode '0644'
+    content <<-EOH
+[rhel-7.1-beta-optional]
+name=My Red Hat Enterprise Linux $releasever - $basearch
+baseurl=http://apt-mirror.front.sepia.ceph.com/rhel7.1-beta-repo/server-optional/
+gpgcheck=0
+enabled=1
+    EOH
+  end
+else
+  file '/etc/yum.repos.d/rhel7.repo' do
+    owner 'root'
+    group 'root'
+    mode '0644'
+    content <<-EOH
 [rhel-7-repo]
 name=My Red Hat Enterprise Linux $releasever - $basearch
 baseurl=http://apt-mirror.front.sepia.ceph.com/rhel7repo/server
 gpgcheck=0
 enabled=1
-  EOH
-end
-file '/etc/yum.repos.d/rhel7-optional.repo' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  content <<-EOH
+    EOH
+  end
+  file '/etc/yum.repos.d/rhel7-optional.repo' do
+    owner 'root'
+    group 'root'
+    mode '0644'
+    content <<-EOH
 [rhel-7-optional]
 name=My Red Hat Enterprise Linux $releasever - $basearch
 baseurl=http://apt-mirror.front.sepia.ceph.com/rhel7repo/server-optional
 gpgcheck=0
 enabled=1
-  EOH
+    EOH
+  end
 end
 
 file '/etc/yum.repos.d/rhel7-extras.repo' do
