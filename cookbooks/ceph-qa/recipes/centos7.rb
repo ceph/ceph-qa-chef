@@ -9,18 +9,10 @@ cookbook_file '/etc/yum.repos.d/epel.repo' do
   group "root"
 end
 
+# We used to install a forked version of apache
+# if the repo is still around, delete it
 file '/etc/yum.repos.d/apache-ceph.repo' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  content <<-EOH
-[centos7-apache-ceph]
-name=CentOS 7 Local apache Repo
-baseurl=http://gitbuilder.ceph.com/apache2-rpm-centos7-x86_64-basic/ref/master/
-gpgcheck=0
-enabled=1
-priority=2
-  EOH
+  action :delete
 end
 
 file '/etc/yum.repos.d/fcgi-ceph.repo' do
@@ -143,27 +135,19 @@ end
 #Rados GW
 
 #Force downgrade of packages doesnt work on older chef, uninstall first.
-package 'httpd' do
+package "httpd" do
   action :remove
 end
-package 'http-devel' do
+package "httpd-devel" do
   action :remove
 end
-package 'httpd-tools' do
+package "httpd-tools" do
   action :remove
 end
-package 'mod_ssl' do
-  version '2.4.6-17_ceph.el7.centos'
-end
-package 'httpd' do
-  version '2.4.6-17_ceph.el7.centos'
-end
-package 'httpd-tools' do
-  version '2.4.6-17_ceph.el7.centos'
-end
-package 'httpd-devel' do
-  version '2.4.6-17_ceph.el7.centos'
-end
+package 'httpd'
+package 'httpd-devel'
+package 'httpd-tools'
+package 'mod_ssl'
 package 'mod_fastcgi' do
   version '2.4.7-1.ceph.el7.centos'
 end

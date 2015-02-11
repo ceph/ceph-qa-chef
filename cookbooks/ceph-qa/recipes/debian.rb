@@ -75,13 +75,11 @@ file '/etc/apt/sources.list.d/radosgw.list' do
   if node[:platform_version] >= "7.0" and node[:platform_version] < "8.0"
     # pull from wheezy gitbuilder
     content <<-EOH
-deb http://gitbuilder.ceph.com/apache2-deb-wheezy-x86_64-basic/ref/master/ wheezy main
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-wheezy-x86_64-basic/ref/master/ wheezy main
 EOH
   elsif node[:platform_version] >= "6.0" and node[:platform_version] < "7.0"
     # pull from squeeze gitbuilder
     content <<-EOH
-deb http://gitbuilder.ceph.com/apache2-deb-squeeze-x86_64-basic/ref/master/ squeeze main
 deb http://gitbuilder.ceph.com/libapache-mod-fastcgi-deb-squeeze-x86_64-basic/ref/master/ squeeze main
 EOH
   else

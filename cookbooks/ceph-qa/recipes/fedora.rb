@@ -22,19 +22,10 @@ cookbook_file '/etc/default/grub' do
 end
 
 
-
+# We used to install a forked version of apache
+# if the repo is still around, delete it
 file '/etc/yum.repos.d/apache-ceph.repo' do
-  owner 'root'
-  group 'root'
-  mode '0644'
-  content <<-EOH
-[fedora-apache-ceph]
-name=Fedora Local apache Repo
-baseurl=http://gitbuilder.ceph.com/apache2-rpm-fedora#{node.platform_version}-x86_64-basic/ref/master/
-priority=0
-pgcheck=0
-enabled=1
-  EOH
+  action :delete
 end
   
 file '/etc/yum.repos.d/fcgi-ceph.repo' do
@@ -149,65 +140,33 @@ end
 #Rados GW
 
 #Force downgrade of packages doesnt work on older chef, uninstall first.
-package 'httpd' do
+package "httpd" do
   action :remove
 end
-package 'http-devel' do
+package "httpd-devel" do
   action :remove
 end
-package 'httpd-tools' do
+package "httpd-tools" do
   action :remove
 end
+package 'httpd'
+package 'httpd-devel'
+package 'httpd-tools'
+package 'mod_ssl'
 
 if node[:platform_version] == "18"
-  package 'mod_ssl' do
-    version '2.2.22-1.ceph.fc18'
-  end
-  package 'httpd' do
-    version '2.2.22-1.ceph.fc18'
-  end
-  package 'httpd-tools' do
-    version '2.2.22-1.ceph.fc18'
-  end
-  package 'httpd-devel' do
-    version '2.2.22-1.ceph.fc18'
-  end
   package 'mod_fastcgi' do
     version '2.4.7-1.ceph.fc18'
   end
 end
 
 if node[:platform_version] == "19"
-  package 'mod_ssl' do
-    version '2.2.22-1.ceph.fc19'
-  end
-  package 'httpd' do
-    version '2.2.22-1.ceph.fc19'
-  end
-  package 'httpd-tools' do
-    version '2.2.22-1.ceph.fc19'
-  end
-  package 'httpd-devel' do
-    version '2.2.22-1.ceph.fc19'
-  end
   package 'mod_fastcgi' do
     version '2.4.7-1.ceph.fc19'
   end
 end
 
 if node[:platform_version] == "20"
-  package 'mod_ssl' do
-    version '2.4.6-17_ceph.fc20'
-  end
-  package 'httpd' do
-    version '2.4.6-17_ceph.fc20'
-  end
-  package 'httpd-tools' do
-    version '2.4.6-17_ceph.fc20'
-  end
-  package 'httpd-devel' do
-    version '2.4.6-17_ceph.fc20'
-  end
   package 'mod_fastcgi' do
     version '2.4.7-1.ceph.fc20'
   end
