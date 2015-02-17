@@ -87,6 +87,18 @@ EOH
   end
 end
 
+
+#Work around broken wget onwheezy
+file '/etc/wgetrc' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+    content <<-EOH
+check_certificate = off
+passive_ftp = on
+EOH
+end
+
 execute 'apt-get update' do
   command <<-'EOH'
     apt-get update || apt-get update || true
