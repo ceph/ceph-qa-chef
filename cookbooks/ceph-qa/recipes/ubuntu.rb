@@ -112,6 +112,21 @@ file '/etc/apt/sources.list.d/ceph-extras.list' do
   content tgt_content
 end
 
+# blkin libraries, only trusty has new enough lttng for these
+if node[:platform] == "ubuntu" and node[:platform_version] == "14.04"
+  file '/etc/apt/sources.list.d/blkin.list' do
+    owner 'root'
+    group 'root'
+    mode '0644'
+    content "deb [arch=amd64] http://apt-mirror.front.sepia.ceph.com/blkin/ trusty main\n"
+  end
+  execute "apt-get update" do
+    command "apt-get update"
+  end
+  package 'blkin'
+  package 'lttng-tools'
+end
+
 execute "add release gpg key to apt" do
   command <<-EOH
   wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc' \
