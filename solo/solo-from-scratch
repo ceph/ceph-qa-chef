@@ -82,7 +82,12 @@ git init
 #git pull https://github.com/NewDreamNetwork/ceph-qa-chef.git
 #git pull http://ceph.com/git/ceph-qa-chef.git
 
-#Avoid pulling via HTTP to reduce apache load
-git pull git://ceph.com/ceph-qa-chef.git
-./solo/run
 
+if [ -z "$CHEF_REPO" ]; then
+	git pull git://ceph.com/ceph-qa-chef.git
+else
+	#Avoid pulling via HTTP to reduce apache load
+	git pull "$CHEF_REPO" $CHEF_BRANCH
+fi
+
+./solo/run
