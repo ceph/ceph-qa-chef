@@ -304,6 +304,18 @@ package 'xfsdump'
 package 'dmapi'
 package 'xfslibs-dev'
 package 'libattr1-dev'
+package 'quota'
+package 'libcap2-bin'
+package 'libncurses5-dev'
+package 'lvm2'
+
+ruby_block "edit LVM config" do
+  block do
+    rc = Chef::Util::FileEdit.new("/etc/lvm/lvm.conf")
+    rc.search_file_replace_line(/types =/, "types = [ \"rbd\", 1024 ]")
+    rc.write_file
+  end
+end
 
 #For Mark Nelson:
 if node[:languages][:ruby][:host_cpu] != "arm"
