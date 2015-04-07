@@ -154,18 +154,6 @@ package 'httpd-devel'
 package 'httpd-tools'
 package 'mod_ssl'
 
-if node[:platform_version] == "18"
-  package 'mod_fastcgi' do
-    version '2.4.7-1.ceph.fc18'
-  end
-end
-
-if node[:platform_version] == "19"
-  package 'mod_fastcgi' do
-    version '2.4.7-1.ceph.fc19'
-  end
-end
-
 if node[:platform_version] == "20"
   package 'mod_fastcgi' do
     version '2.4.7-1.ceph.fc20'
