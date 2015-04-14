@@ -14,6 +14,11 @@ file '/etc/security/limits.d/ubuntu.conf' do
   EOH
 end
 
+user "fsgqa" do
+	action :create
+	uid 10101
+end
+
 if node['hostname'].match(/^(magna)/)
   include_recipe "ceph-qa::octo"
 end

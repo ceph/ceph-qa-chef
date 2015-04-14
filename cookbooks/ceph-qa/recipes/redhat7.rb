@@ -210,6 +210,7 @@ package 'libuuid-devel'
 package 'libacl-devel'
 package 'bc'
 package 'xfsdump'
+package 'ncurses-devel'
   
 # for blktrace and seekwatcher
 package 'blktrace'
