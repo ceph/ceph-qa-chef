@@ -84,7 +84,7 @@ git init
 
 
 if [ -z "$CHEF_REPO" ]; then
-	git pull git://ceph.com/ceph-qa-chef.git
+	git pull git://git.ceph.com/ceph-qa-chef.git
 else
 	#Avoid pulling via HTTP to reduce apache load
 	git pull "$CHEF_REPO" $CHEF_BRANCH
