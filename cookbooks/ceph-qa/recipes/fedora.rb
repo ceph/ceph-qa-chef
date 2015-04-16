@@ -59,8 +59,8 @@ end
 
 execute "Installing GPG keys" do
   command <<-'EOH'
-rpm --import 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc'
-rpm --import 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc'
+rpm --import 'https://git.ceph.com/?p=ceph.git;a=blob_plain;f=keys/release.asc'
+rpm --import 'https://git.ceph.com/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc'
   EOH
 end
 
