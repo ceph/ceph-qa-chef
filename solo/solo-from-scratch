@@ -80,7 +80,7 @@ cleanup () {
 trap cleanup INT TERM EXIT
 git init
 #git pull https://github.com/NewDreamNetwork/ceph-qa-chef.git
-#git pull http://ceph.com/git/ceph-qa-chef.git
+#git pull http://git.ceph.com/ceph-qa-chef.git
 
 
 if [ -z "$CHEF_REPO" ]; then

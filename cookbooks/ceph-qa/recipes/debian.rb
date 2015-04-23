@@ -3,14 +3,14 @@ include_recipe "ceph-qa::pip_mirror"
 
 execute "add autobuild gpg key to apt" do
   command <<-EOH
-  wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
+  wget -q -O- 'http://git.ceph.com/?p=ceph.git;a=blob_plain;f=keys/autobuild.asc;hb=HEAD' \
   | sudo apt-key add -
   EOH
 end
 
 execute "add autobuild gpg key to apt" do
   command <<-EOH
-  wget -q -O- 'http://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc;hb=HEAD' \
+  wget -q -O- 'http://git.ceph.com/?p=ceph.git;a=blob_plain;f=keys/release.asc;hb=HEAD' \
   | sudo apt-key add -
   EOH
 end
