@@ -154,6 +154,12 @@ package 'fuse-libs'
 #ceph deploy
 package 'python-virtualenv'
 
+#for RBD tests
+group "disk" do
+  action :modify
+  members "ubuntu"
+  append true
+end
 
 #RGW tests
 directory '/home/ubuntu/.cpan/CPAN/' do
