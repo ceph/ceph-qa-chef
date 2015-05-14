@@ -15,8 +15,17 @@ file '/etc/security/limits.d/ubuntu.conf' do
 end
 
 user "fsgqa" do
+	supports :manage_home => true
+	home "/home/fsgqa"
+	shell "/bin/bash"
 	action :create
 	uid 10101
+end
+
+directory "/home/fsgqa" do
+	owner "fsgqa"
+	mode 00755
+	action :create
 end
 
 if node['hostname'].match(/^(magna)/)

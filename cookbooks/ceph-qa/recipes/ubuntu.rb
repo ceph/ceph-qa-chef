@@ -308,6 +308,7 @@ package 'quota'
 package 'libcap2-bin'
 package 'libncurses5-dev'
 package 'lvm2'
+package 'gawk'
 
 ruby_block "edit LVM config" do
   block do
