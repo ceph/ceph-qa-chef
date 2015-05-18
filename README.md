@@ -6,3 +6,6 @@ We want to remove some of the hardcoded values that are unique to our labs,
 like the "ubuntu" UID and the URL to gitbuilder.ceph.com.
 
 We've ported a lot of the Chef settings, but we're not yet complete.
+
+Please join us in the #sepia IRC channel in irc.oftc.net for discussion
+regarding the Ceph test framework and lab management.
