@@ -1,7 +1,7 @@
 # Check if burnupi/plana
-if !node['hostname'].match(/^(plana|burnupi|mira|vpm|tala|saya|dubia|apama|rhoda|magna|typica)/)
- raise "This recipe is only intended for plana/burnupi/mira/vpm/tala/saya/dubia/apama/magna/typica hosts"
-end
+#if !node['hostname'].match(/^(plana|burnupi|mira|vpm|tala|saya|dubia|apama|rhoda|magna|typica)/)
+# raise "This recipe is only intended for plana/burnupi/mira/vpm/tala/saya/dubia/apama/magna/typica hosts"
+#end
 
 
 # high max open files
