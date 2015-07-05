@@ -706,16 +706,18 @@ execute "Installing CPAN Amazon::S3" do
   command "cpan  Amazon::S3"
 end
 
+if node['hostname'].match(/^(plana|burnupi|mira|vpm|tala|saya|dubia|apama|rhoda|magna|typica)/)
 #Static DNS
-file '/etc/resolvconf/resolv.conf.d/base' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  content <<-EOH
-    nameserver 10.214.128.4
-    nameserver 10.214.128.5
-    search front.sepia.ceph.com sepia.ceph.com
-  EOH
+  file '/etc/resolvconf/resolv.conf.d/base' do
+    owner 'root'
+    group 'root'
+    mode '0755'
+    content <<-EOH
+      nameserver 10.214.128.4
+      nameserver 10.214.128.5
+      search front.sepia.ceph.com sepia.ceph.com
+    EOH
+  end
 end
 
 if node['hostname'].match(/^(magna)/)
@@ -785,10 +787,12 @@ file '/etc/default/nagios-nrpe-server' do
   EOH
 end
 
-execute "Restarting resolvdns" do
-  command <<-'EOH'
-    sudo service resolvconf restart
-  EOH
+if node['hostname'].match(/^(plana|burnupi|mira|vpm|tala|saya|dubia|apama|rhoda|magna|typica)/)
+  execute "Restarting resolvdns" do
+    command <<-'EOH'
+      sudo service resolvconf restart
+    EOH
+  end
 end
 
 execute "Enabling auto-fsck fix to prevent boot hangup" do
